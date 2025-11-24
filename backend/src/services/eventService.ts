@@ -42,7 +42,8 @@ function transformEvent(event: Prisma.EventGetPayload<{ include: typeof eventInc
     id: event.id,
     title: event.title,
     description: event.description,
-    eventDate: event.eventDate.toISOString().split('T')[0],
+    startDate: event.startDate.toISOString().split('T')[0],
+    endDate: event.endDate ? event.endDate.toISOString().split('T')[0] : null,
     adminPeriod: event.adminPeriod,
     createdAt: event.createdAt.toISOString(),
     updatedAt: event.updatedAt.toISOString(),
@@ -52,6 +53,7 @@ function transformEvent(event: Prisma.EventGetPayload<{ include: typeof eventInc
       description: et.tag.description,
       color: et.tag.color,
       isDefault: et.tag.isDefault,
+      isPrimary: et.isPrimary,
     })),
     _count: event._count,
   }
@@ -64,7 +66,8 @@ function transformEventDetail(
     id: event.id,
     title: event.title,
     description: event.description,
-    eventDate: event.eventDate.toISOString().split('T')[0],
+    startDate: event.startDate.toISOString().split('T')[0],
+    endDate: event.endDate ? event.endDate.toISOString().split('T')[0] : null,
     adminPeriod: event.adminPeriod,
     createdAt: event.createdAt.toISOString(),
     updatedAt: event.updatedAt.toISOString(),
@@ -74,6 +77,7 @@ function transformEventDetail(
       description: et.tag.description,
       color: et.tag.color,
       isDefault: et.tag.isDefault,
+      isPrimary: et.isPrimary,
     })),
     sources: event.sources.map((s) => ({
       id: s.id,
@@ -111,11 +115,11 @@ export const eventService = {
 
     const where: Prisma.EventWhereInput = {}
 
-    // Search filter
+    // Search filter - using PostgreSQL full-text search
     if (search) {
       where.OR = [
-        { title: { contains: search, mode: 'insensitive' } },
-        { description: { contains: search, mode: 'insensitive' } },
+        { title: { search: search } },
+        { description: { search: search } },
       ]
     }
 
@@ -136,14 +140,24 @@ export const eventService = {
       where.adminPeriod = adminPeriod as AdminPeriod
     }
 
-    // Date range filter
+    // Date range filter - events that overlap with the filter range
     if (startDate || endDate) {
-      where.eventDate = {}
+      const dateFilters: Prisma.EventWhereInput[] = []
       if (startDate) {
-        where.eventDate.gte = new Date(startDate)
+        // Event ends after filter start (or has no end date)
+        dateFilters.push({
+          OR: [
+            { endDate: { gte: new Date(startDate) } },
+            { endDate: null, startDate: { gte: new Date(startDate) } },
+          ],
+        })
       }
       if (endDate) {
-        where.eventDate.lte = new Date(endDate)
+        // Event starts before filter end
+        dateFilters.push({ startDate: { lte: new Date(endDate) } })
+      }
+      if (dateFilters.length > 0) {
+        where.AND = dateFilters
       }
     }
 
@@ -180,8 +194,9 @@ export const eventService = {
   },
 
   async create(input: CreateEventInput) {
-    const eventDate = new Date(input.eventDate)
-    const adminPeriod = calculateAdminPeriod(eventDate)
+    const startDate = new Date(input.startDate)
+    const endDate = input.endDate ? new Date(input.endDate) : null
+    const adminPeriod = calculateAdminPeriod(startDate)
 
     // Validate tags exist
     if (input.tagIds.length > 0) {
@@ -200,15 +215,24 @@ export const eventService = {
       }
     }
 
+    // Validate primary tag is in tagIds
+    if (input.primaryTagId && !input.tagIds.includes(input.primaryTagId)) {
+      throw new ValidationError('Primary tag must be in the tag list', {
+        primaryTagId: ['Primary tag ID must be included in tagIds'],
+      })
+    }
+
     const event = await prisma.event.create({
       data: {
         title: input.title,
         description: input.description,
-        eventDate,
+        startDate,
+        endDate,
         adminPeriod,
         tags: {
           create: input.tagIds.map((tagId) => ({
             tagId,
+            isPrimary: tagId === input.primaryTagId,
           })),
         },
       },
@@ -225,10 +249,10 @@ export const eventService = {
       throw new NotFoundError('Event', id)
     }
 
-    // Calculate admin period if date changed
+    // Calculate admin period if start date changed
     let adminPeriod: AdminPeriod | undefined
-    if (input.eventDate) {
-      adminPeriod = calculateAdminPeriod(new Date(input.eventDate))
+    if (input.startDate) {
+      adminPeriod = calculateAdminPeriod(new Date(input.startDate))
     }
 
     // Validate tags if provided
@@ -246,6 +270,13 @@ export const eventService = {
           tagIds: [`Tags not found: ${invalidIds.join(', ')}`],
         })
       }
+
+      // Validate primary tag is in tagIds
+      if (input.primaryTagId && !input.tagIds.includes(input.primaryTagId)) {
+        throw new ValidationError('Primary tag must be in the tag list', {
+          primaryTagId: ['Primary tag ID must be included in tagIds'],
+        })
+      }
     }
 
     const event = await prisma.event.update({
@@ -253,12 +284,16 @@ export const eventService = {
       data: {
         ...(input.title && { title: input.title }),
         ...(input.description !== undefined && { description: input.description }),
-        ...(input.eventDate && { eventDate: new Date(input.eventDate) }),
+        ...(input.startDate && { startDate: new Date(input.startDate) }),
+        ...(input.endDate !== undefined && { endDate: input.endDate ? new Date(input.endDate) : null }),
         ...(adminPeriod && { adminPeriod }),
         ...(input.tagIds && {
           tags: {
             deleteMany: {},
-            create: input.tagIds.map((tagId) => ({ tagId })),
+            create: input.tagIds.map((tagId) => ({
+              tagId,
+              isPrimary: tagId === input.primaryTagId,
+            })),
           },
         }),
       },

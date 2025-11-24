@@ -1,5 +1,5 @@
 import type { Event } from '@/services/api'
-import { getBiasLabel, getAdminPeriodShortLabel } from './utils'
+import { getBiasLabel, getAdminPeriodShortLabel, formatDateRange } from './utils'
 
 /**
  * Generates markdown content for an event, optimized for Obsidian.
@@ -9,9 +9,16 @@ export function generateEventMarkdown(event: Event): string {
 
   // YAML frontmatter
   lines.push('---')
-  lines.push(`date: ${event.eventDate}`)
+  lines.push(`start_date: ${event.startDate}`)
+  if (event.endDate) {
+    lines.push(`end_date: ${event.endDate}`)
+  }
   lines.push(`admin_period: ${event.adminPeriod}`)
   if (event.tags.length > 0) {
+    const primaryTag = event.tags.find((t) => t.isPrimary)
+    if (primaryTag) {
+      lines.push(`primary_tag: ${primaryTag.name}`)
+    }
     lines.push(`tags: [${event.tags.map((t) => t.name).join(', ')}]`)
   }
   lines.push(`created: ${event.createdAt.split('T')[0]}`)
@@ -27,12 +34,18 @@ export function generateEventMarkdown(event: Event): string {
   lines.push('')
 
   // Metadata line
-  lines.push(`**Date**: ${event.eventDate} | **Period**: ${getAdminPeriodShortLabel(event.adminPeriod)}`)
+  const dateDisplay = formatDateRange(event.startDate, event.endDate)
+  lines.push(`**Date**: ${dateDisplay} | **Period**: ${getAdminPeriodShortLabel(event.adminPeriod)}`)
   lines.push('')
 
-  // Tags as Obsidian hashtags
+  // Tags as Obsidian hashtags (primary tag first, marked with star)
   if (event.tags.length > 0) {
-    lines.push(event.tags.map((t) => `#${t.name}`).join(' '))
+    const sortedTags = [...event.tags].sort((a, b) => {
+      if (a.isPrimary && !b.isPrimary) return -1
+      if (!a.isPrimary && b.isPrimary) return 1
+      return 0
+    })
+    lines.push(sortedTags.map((t) => t.isPrimary ? `#${t.name} ⭐` : `#${t.name}`).join(' '))
     lines.push('')
   }
 
@@ -88,7 +101,7 @@ export function generateEventMarkdown(event: Event): string {
  * Generates a safe filename from the event title.
  */
 export function generateFilename(event: Event): string {
-  const datePrefix = event.eventDate
+  const datePrefix = event.startDate
   const slug = event.title
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, '-')

@@ -119,6 +119,10 @@ export interface Tag {
   createdAt: string
 }
 
+export interface TagWithPrimary extends Tag {
+  isPrimary: boolean
+}
+
 export interface Publication {
   id: string
   name: string
@@ -157,11 +161,12 @@ export interface Event {
   id: string
   title: string
   description: string | null
-  eventDate: string
+  startDate: string
+  endDate: string | null
   adminPeriod: AdminPeriod
   createdAt: string
   updatedAt: string
-  tags: Tag[]
+  tags: TagWithPrimary[]
   sources: Source[]
   counterNarrative: CounterNarrative | null
 }
@@ -174,10 +179,10 @@ export const eventsApi = {
   get: (id: string) =>
     api.get<ApiResponse<Event>>(`/events/${id}`),
 
-  create: (data: { title: string; description?: string; eventDate: string; tagIds: string[] }) =>
+  create: (data: { title: string; description?: string; startDate: string; endDate?: string; tagIds: string[]; primaryTagId?: string }) =>
     api.post<ApiResponse<Event>>('/events', data),
 
-  update: (id: string, data: Partial<{ title: string; description?: string; eventDate: string; tagIds: string[] }>) =>
+  update: (id: string, data: Partial<{ title: string; description?: string; startDate: string; endDate?: string | null; tagIds: string[]; primaryTagId?: string | null }>) =>
     api.put<ApiResponse<Event>>(`/events/${id}`, data),
 
   delete: (id: string) =>

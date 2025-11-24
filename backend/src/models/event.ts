@@ -5,22 +5,34 @@ import { z } from 'zod'
 export const createEventSchema = z.object({
   title: z.string().min(1, 'Title is required').max(500, 'Title must be 500 characters or less'),
   description: z.string().optional(),
-  eventDate: z.string().refine((date) => !isNaN(Date.parse(date)), {
+  startDate: z.string().refine((date) => !isNaN(Date.parse(date)), {
     message: 'Invalid date format',
   }),
+  endDate: z.string().refine((date) => !isNaN(Date.parse(date)), {
+    message: 'Invalid date format',
+  }).optional(),
   tagIds: z.array(z.string().uuid()).default([]),
+  primaryTagId: z.string().uuid().optional(),
 })
 
 export const updateEventSchema = z.object({
   title: z.string().min(1).max(500).optional(),
   description: z.string().optional(),
-  eventDate: z
+  startDate: z
     .string()
     .refine((date) => !isNaN(Date.parse(date)), {
       message: 'Invalid date format',
     })
     .optional(),
+  endDate: z
+    .string()
+    .refine((date) => !isNaN(Date.parse(date)), {
+      message: 'Invalid date format',
+    })
+    .nullable()
+    .optional(),
   tagIds: z.array(z.string().uuid()).optional(),
+  primaryTagId: z.string().uuid().nullable().optional(),
 })
 
 export const eventQuerySchema = z.object({
@@ -31,7 +43,7 @@ export const eventQuerySchema = z.object({
   adminPeriod: z.enum(['TRUMP_1', 'TRUMP_2', 'OTHER']).optional(),
   startDate: z.string().optional(),
   endDate: z.string().optional(),
-  sortBy: z.enum(['eventDate', 'createdAt', 'title']).default('eventDate'),
+  sortBy: z.enum(['startDate', 'createdAt', 'title']).default('startDate'),
   sortOrder: z.enum(['asc', 'desc']).default('desc'),
 })
 
@@ -41,15 +53,25 @@ export type UpdateEventInput = z.infer<typeof updateEventSchema>
 export type EventQueryParams = z.infer<typeof eventQuerySchema>
 
 // Response types
+export interface TagWithPrimary {
+  id: string
+  name: string
+  description: string | null
+  color: string
+  isDefault: boolean
+  isPrimary: boolean
+}
+
 export interface EventResponse {
   id: string
   title: string
   description: string | null
-  eventDate: string
+  startDate: string
+  endDate: string | null
   adminPeriod: AdminPeriod
   createdAt: string
   updatedAt: string
-  tags: TagResponse[]
+  tags: TagWithPrimary[]
   _count?: {
     sources: number
   }

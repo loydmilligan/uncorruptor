@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom'
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card'
 import { TagBadge } from './TagBadge'
-import { formatDate, getAdminPeriodShortLabel } from '@/lib/utils'
+import { formatDateRange, getAdminPeriodShortLabel } from '@/lib/utils'
 import type { Event } from '@/services/api'
 
 interface EventCardProps {
@@ -9,6 +9,13 @@ interface EventCardProps {
 }
 
 export function EventCard({ event }: EventCardProps) {
+  // Sort tags with primary first
+  const sortedTags = [...event.tags].sort((a, b) => {
+    if (a.isPrimary && !b.isPrimary) return -1
+    if (!a.isPrimary && b.isPrimary) return 1
+    return 0
+  })
+
   return (
     <Link to={`/events/${event.id}`}>
       <Card className="hover:shadow-md transition-shadow cursor-pointer">
@@ -20,7 +27,7 @@ export function EventCard({ event }: EventCardProps) {
             </span>
           </div>
           <CardDescription className="text-sm">
-            {formatDate(event.eventDate)}
+            {formatDateRange(event.startDate, event.endDate)}
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -30,8 +37,8 @@ export function EventCard({ event }: EventCardProps) {
             </p>
           )}
           <div className="flex flex-wrap gap-1.5">
-            {event.tags.map((tag) => (
-              <TagBadge key={tag.id} name={tag.name} color={tag.color} />
+            {sortedTags.map((tag) => (
+              <TagBadge key={tag.id} name={tag.name} color={tag.color} isPrimary={tag.isPrimary} />
             ))}
           </div>
           {event._count && event._count.sources > 0 && (

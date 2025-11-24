@@ -1,0 +1,403 @@
+{
+  "version": "1.0",
+  "metadata": {
+    "generatedBy": "Sample Data Generator",
+    "generatedAt": "2025-11-24T20:00:00Z",
+    "description": "Sample events demonstrating various categories and analysis types"
+  },
+  "events": [
+    {
+      "title": "Foreign Government Books Entire Hotel Floor During Trade Negotiations",
+      "startDate": "2025-02-10",
+      "endDate": "2025-02-15",
+      "description": "The government of Country X booked an entire floor of the President's hotel in Washington DC during sensitive trade negotiations, raising emoluments clause concerns. Hotel records show payments totaling $450,000 for the five-day stay, far exceeding typical diplomatic accommodations.",
+      "tags": ["corruption", "constitutional-concerns", "self-dealing"],
+      "primaryTag": "corruption",
+      "sources": [
+        {
+          "url": "https://washingtonpost.com/2025/02/11/hotel-booking-trade-talks",
+          "articleTitle": "Foreign Government's Lavish Hotel Spending Raises Ethics Questions",
+          "biasRating": -2,
+          "dateAccessed": "2025-02-11",
+          "metadata": {
+            "wordCount": 1800,
+            "sentiment": "critical",
+            "factCheckStatus": "verified",
+            "authorCredentials": ["investigative reporter", "Pulitzer finalist"]
+          }
+        },
+        {
+          "url": "https://nytimes.com/2025/02/12/emoluments-clause-question",
+          "articleTitle": "Legal Scholars Divided on Latest Emoluments Question",
+          "biasRating": -1,
+          "dateAccessed": "2025-02-12"
+        },
+        {
+          "url": "https://wallstreetjournal.com/2025/02/13/hotel-bookings-business",
+          "articleTitle": "Presidential Properties See International Business Boom",
+          "biasRating": 1,
+          "dateAccessed": "2025-02-13"
+        }
+      ],
+      "counterNarrative": {
+        "narrativeText": "White House counsel stated that the President has no day-to-day involvement in hotel operations and the bookings were made at standard commercial rates. Administration argues this is normal business activity and the President cannot be expected to turn away all international guests.",
+        "adminStrength": "weak",
+        "concernStrength": "strong",
+        "sourceRefs": "White House Press Briefing, Feb 12 2025; Legal counsel statement"
+      },
+      "analysis": {
+        "corruption": {
+          "slipperySlope": {
+            "stage": "escalation",
+            "priorEvents": [
+              "Trump Hotels Accept Foreign Government Bookings (2017-2020)",
+              "Mar-a-Lago Membership Fees Raised After Election"
+            ],
+            "escalationPattern": "Pattern of foreign governments seeking favor through commercial arrangements. Started with club memberships, progressed to major event bookings, now includes timing during negotiations.",
+            "connectedIndividuals": ["Eric Trump (hotel operations)", "Donald Trump Jr. (business oversight)"],
+            "timeline": [
+              {
+                "date": "2017-01-20",
+                "event": "Saudi lobbyists book rooms, spend $270k",
+                "severity": 5
+              },
+              {
+                "date": "2019-03-15",
+                "event": "Malaysian PM stays during trade discussions",
+                "severity": 6
+              },
+              {
+                "date": "2025-02-10",
+                "event": "Country X books floor during negotiations",
+                "severity": 8
+              }
+            ]
+          },
+          "financialImpact": {
+            "estimated": 450000,
+            "currency": "USD",
+            "beneficiaries": ["Trump Organization", "Trump family trust"]
+          }
+        },
+        "constitutional": {
+          "clausesAffected": ["Foreign Emoluments Clause"],
+          "legalChallenges": [
+            {
+              "court": "DC Circuit",
+              "caseNumber": "25-CV-789",
+              "status": "filed"
+            }
+          ],
+          "constitutionalScholarsOpinions": [
+            {
+              "scholar": "Laurence Tribe",
+              "institution": "Harvard Law",
+              "assessment": "Clear violation of foreign emoluments clause"
+            },
+            {
+              "scholar": "Jonathan Turley",
+              "institution": "George Washington University",
+              "assessment": "Questionable but difficult to prove quid pro quo"
+            }
+          ]
+        }
+      },
+      "relationships": {
+        "relatedEvents": [
+          {
+            "eventTitle": "Saudi Lobbyists Book Trump Hotel Rooms (2017)",
+            "relationshipType": "precursor",
+            "description": "Earlier pattern of foreign spending at Trump properties"
+          }
+        ],
+        "involvedPersons": [
+          {
+            "name": "Country X Ambassador",
+            "role": "purchaser",
+            "priorEvents": []
+          }
+        ],
+        "involvedOrganizations": [
+          {
+            "name": "Trump Organization",
+            "relationshipType": "beneficiary"
+          },
+          {
+            "name": "Country X Government",
+            "relationshipType": "spender"
+          }
+        ]
+      },
+      "metadata": {
+        "importSource": "manual",
+        "confidence": 1.0,
+        "reviewStatus": "verified",
+        "customFields": {
+          "mediaAttention": "high",
+          "publicReaction": "polarized",
+          "internationalCoverage": ["UK", "Canada", "EU"]
+        }
+      }
+    },
+    {
+      "title": "Administration Proposes Massive Infrastructure Spending Without Offsets",
+      "startDate": "2025-03-01",
+      "description": "The administration unveiled a $2 trillion infrastructure proposal with no corresponding spending cuts or tax increases to offset costs. This represents a significant departure from traditional Republican fiscal conservatism and deficit concerns that dominated the party from Reagan through the Tea Party era.",
+      "tags": ["divergent-from-historical-gop", "policy-harm"],
+      "primaryTag": "divergent-from-historical-gop",
+      "sources": [
+        {
+          "url": "https://reuters.com/2025/03/01/infrastructure-plan-unveiled",
+          "articleTitle": "Trump Unveils $2T Infrastructure Plan With No Deficit Offsets",
+          "biasRating": 0,
+          "dateAccessed": "2025-03-01"
+        },
+        {
+          "url": "https://heritage.org/budget/analysis/infrastructure-deficit-concerns",
+          "articleTitle": "Conservative Think Tank Warns of Fiscal Irresponsibility",
+          "biasRating": 2,
+          "dateAccessed": "2025-03-02",
+          "metadata": {
+            "sentiment": "critical",
+            "notableQuote": "This is not the Republican Party we knew"
+          }
+        }
+      ],
+      "counterNarrative": {
+        "narrativeText": "Administration argues that infrastructure investment will pay for itself through economic growth and that deficit concerns are overblown in times of low interest rates. Points to bipartisan infrastructure needs and job creation.",
+        "adminStrength": "moderate",
+        "concernStrength": "moderate",
+        "sourceRefs": "Treasury Secretary testimony, March 3, 2025"
+      },
+      "analysis": {
+        "divergence": {
+          "score": 9.0,
+          "historicalComparison": {
+            "traditionalGOPPosition": "Fiscal conservatism, balanced budgets, deficit reduction as core principle. Tea Party movement (2009-2016) made deficit reduction a defining issue.",
+            "currentPosition": "Large spending programs without corresponding cuts or revenue increases. Deficit concerns dismissed.",
+            "keyDifferences": [
+              "Reagan era: 'Government IS the problem' - emphasized spending cuts",
+              "1990s: Gingrich revolution focused on balanced budget amendment",
+              "2009-2016: Tea Party made deficit reduction the central issue",
+              "2017-2021: Trump tax cuts without offsetting cuts added $2T to deficit",
+              "2025: Proposing $2T spending with no offsets while claiming fiscal conservatism"
+            ],
+            "notableGOPCritics": [
+              "Sen. Mitt Romney: 'Where is the party of fiscal responsibility?'",
+              "Rep. Liz Cheney: 'We've abandoned our principles'",
+              "Paul Ryan (ret.): 'This is not sustainable'"
+            ],
+            "notableGOPDefenders": [
+              "Sen. Josh Hawley: 'We need to invest in America'",
+              "Rep. Jim Jordan: 'Infrastructure is worth borrowing for'"
+            ]
+          },
+          "electoralPolitics": {
+            "intraPartyTension": "High - traditional conservatives vs. populist wing",
+            "democraticResponse": "Mixed - support infrastructure but question deficit hypocrisy",
+            "pollingSplit": {
+              "republicanVoters": "65% support (populist shift)",
+              "republicanDonors": "35% support (fiscal conservatives)",
+              "independents": "55% support"
+            }
+          }
+        }
+      },
+      "relationships": {
+        "relatedEvents": [
+          {
+            "eventTitle": "2017 Tax Cuts Add $2 Trillion to Deficit",
+            "relationshipType": "precursor",
+            "description": "Earlier departure from fiscal conservatism"
+          }
+        ],
+        "involvedPersons": [
+          {
+            "name": "Treasury Secretary",
+            "role": "proposal advocate"
+          }
+        ]
+      },
+      "metadata": {
+        "customFields": {
+          "mediaAttention": "very high",
+          "economicImpact": "potential",
+          "partyDivision": "significant"
+        }
+      }
+    },
+    {
+      "title": "White House Pressures DOJ to Drop Investigation of Political Ally",
+      "startDate": "2025-03-15",
+      "description": "Multiple news outlets report that White House staff contacted DOJ officials to request they drop a criminal investigation into a political ally and major campaign donor. This raises concerns about political interference in law enforcement and erosion of DOJ independence.",
+      "tags": ["breaking-norms", "corruption", "constitutional-concerns"],
+      "primaryTag": "breaking-norms",
+      "sources": [
+        {
+          "url": "https://nytimes.com/2025/03/15/white-house-doj-pressure",
+          "articleTitle": "White House Contacted DOJ About Ally's Investigation, Officials Say",
+          "biasRating": -1,
+          "dateAccessed": "2025-03-15"
+        },
+        {
+          "url": "https://cnn.com/2025/03/16/doj-independence-concerns",
+          "articleTitle": "Former DOJ Officials Sound Alarm on Independence",
+          "biasRating": -1,
+          "dateAccessed": "2025-03-16"
+        }
+      ],
+      "counterNarrative": {
+        "narrativeText": "White House denies any improper pressure, stating that routine communication between branches is normal and no specific case outcomes were discussed. Claims media is sensationalizing standard inter-agency coordination.",
+        "adminStrength": "weak",
+        "concernStrength": "strong",
+        "sourceRefs": "White House spokesperson statement, March 16"
+      },
+      "analysis": {
+        "normViolation": {
+          "traditionalNorm": "Post-Watergate norm of DOJ independence from White House political pressure, established to prevent abuse of prosecutorial power",
+          "violationSeverity": 9,
+          "historicalPrecedents": [
+            {
+              "administration": "Nixon",
+              "event": "Saturday Night Massacre",
+              "outcome": "Impeachment proceedings initiated",
+              "similarity": "Direct interference in investigation"
+            },
+            {
+              "administration": "Obama",
+              "event": "Fast and Furious investigation",
+              "outcome": "Maintained DOJ independence despite pressure",
+              "similarity": "Allegations of political influence, but no documented interference"
+            }
+          ],
+          "institutionalResponse": [
+            "3 former DOJ officials issue joint statement",
+            "ABA issues concerns about prosecutorial independence",
+            "Congressional oversight hearing scheduled"
+          ]
+        }
+      },
+      "relationships": {
+        "involvedPersons": [
+          {
+            "name": "Political Ally Under Investigation",
+            "role": "subject",
+            "connections": ["major campaign donor", "business partner of family member"]
+          },
+          {
+            "name": "White House Chief of Staff",
+            "role": "alleged to have made contact"
+          }
+        ]
+      },
+      "metadata": {
+        "customFields": {
+          "mediaAttention": "high",
+          "institutionalAlarm": "high",
+          "comparisons": ["Watergate", "Saturday Night Massacre"]
+        }
+      }
+    },
+    {
+      "title": "Cabinet Secretary Makes False Claims About Climate Data",
+      "startDate": "2025-02-20",
+      "description": "The Interior Secretary claimed in congressional testimony that 'there is no scientific consensus on climate change,' contradicting the stated positions of NASA, NOAA, and 97% of climate scientists.",
+      "tags": ["dishonesty", "policy-harm"],
+      "primaryTag": "dishonesty",
+      "sources": [
+        {
+          "url": "https://sciencemag.org/2025/02/20/interior-secretary-false-climate-claims",
+          "articleTitle": "Scientists Rebut Interior Secretary's Climate Testimony",
+          "biasRating": -1,
+          "dateAccessed": "2025-02-20"
+        }
+      ],
+      "counterNarrative": {
+        "narrativeText": "Secretary clarified that he meant there is debate about specific policy responses, not the science itself. Claims statement was taken out of context.",
+        "adminStrength": "weak",
+        "concernStrength": "strong",
+        "sourceRefs": "Follow-up statement from Interior Department"
+      },
+      "analysis": {
+        "factCheck": {
+          "claim": "No scientific consensus on climate change",
+          "verdict": "FALSE",
+          "evidence": [
+            "NASA: 97% of climate scientists agree on human-caused warming",
+            "NOAA: Clear scientific consensus",
+            "National Academy of Sciences: Consensus is unequivocal"
+          ],
+          "policyImpact": "Used to justify rolling back environmental regulations"
+        }
+      },
+      "metadata": {
+        "customFields": {
+          "factCheckRating": "pants-on-fire",
+          "policyConsequences": "potential regulatory rollback"
+        }
+      }
+    },
+    {
+      "title": "Minimal Event Example - Just Title and Date",
+      "startDate": "2025-01-10",
+      "description": "This event demonstrates minimal required fields. An AI might generate this for events where details are still being gathered.",
+      "tags": ["breaking-norms"]
+    },
+    {
+      "title": "Event with Sources but No Analysis Yet",
+      "startDate": "2025-02-05",
+      "endDate": "2025-02-08",
+      "description": "This shows an event with good source coverage but analysis pending. Common when quickly capturing news.",
+      "tags": ["policy-harm", "constitutional-concerns"],
+      "sources": [
+        {
+          "url": "https://apnews.com/article/xyz",
+          "articleTitle": "Administration Announces Policy Change",
+          "biasRating": 0,
+          "dateAccessed": "2025-02-05"
+        },
+        {
+          "url": "https://bbc.com/news/world-us-12345",
+          "articleTitle": "International Reaction to US Policy Shift",
+          "biasRating": 0,
+          "dateAccessed": "2025-02-06"
+        }
+      ]
+    },
+    {
+      "title": "Nepotism: Family Member Appointed to Senior Advisory Role",
+      "startDate": "2025-01-25",
+      "description": "The President appointed his son-in-law to a senior White House advisory position despite lack of relevant experience or security clearance. Raises concerns about nepotism and qualified candidates being passed over.",
+      "tags": ["nepotism", "breaking-norms"],
+      "primaryTag": "nepotism",
+      "sources": [
+        {
+          "url": "https://washingtonpost.com/2025/01/25/nepotism-appointment",
+          "articleTitle": "Family Member Gets White House Role Despite Ethics Concerns",
+          "biasRating": -2,
+          "dateAccessed": "2025-01-25"
+        }
+      ],
+      "counterNarrative": {
+        "narrativeText": "White House argues that family member is unpaid and brings valuable private sector experience. Notes that presidential advisors are exempt from anti-nepotism laws.",
+        "adminStrength": "moderate",
+        "concernStrength": "moderate"
+      },
+      "relationships": {
+        "involvedPersons": [
+          {
+            "name": "Presidential Son-in-Law",
+            "role": "appointee",
+            "qualifications": ["business background", "no government experience"]
+          }
+        ]
+      },
+      "metadata": {
+        "customFields": {
+          "legalStatus": "technically legal but norm-breaking",
+          "historicalComparison": "RFK appointment by JFK led to anti-nepotism law (1967)"
+        }
+      }
+    }
+  ]
+}

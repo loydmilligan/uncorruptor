@@ -1,6 +1,8 @@
 import { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify'
 import { eventService } from '../services/eventService.js'
+import { bulkImportService } from '../services/bulkImportService.js'
 import { createEventSchema, updateEventSchema, eventQuerySchema } from '../models/event.js'
+import { bulkImportSchema } from '../models/bulkImport.js'
 import { sendSuccess, sendCreated, sendNoContent, sendPaginated } from '../lib/response.js'
 import { handleError, ValidationError } from '../lib/errors.js'
 import { ZodError } from 'zod'
@@ -76,6 +78,33 @@ export async function eventRoutes(fastify: FastifyInstance) {
       await eventService.delete(request.params.id)
       sendNoContent(reply)
     } catch (error) {
+      handleError(error, reply)
+    }
+  })
+
+  // POST /api/events/bulk - Bulk import events
+  fastify.post('/bulk', async (request: FastifyRequest, reply: FastifyReply) => {
+    try {
+      const bulkData = bulkImportSchema.parse(request.body)
+
+      // Get options from query params
+      const skipDuplicates = request.query?.['skipDuplicates'] !== 'false'
+      const createTags = request.query?.['createTags'] !== 'false'
+
+      const result = await bulkImportService.importEvents(bulkData, {
+        skipDuplicates,
+        createTags,
+      })
+
+      sendSuccess(reply, result)
+    } catch (error) {
+      if (error instanceof ZodError) {
+        handleError(
+          new ValidationError('Invalid bulk import data', formatZodErrors(error)),
+          reply
+        )
+        return
+      }
       handleError(error, reply)
     }
   })

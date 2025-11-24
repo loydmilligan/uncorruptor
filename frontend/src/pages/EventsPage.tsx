@@ -1,21 +1,22 @@
-import { useState } from 'react'
 import { useSearchParams, Link } from 'react-router-dom'
 import { useEvents, type EventFilters } from '@/hooks/useEvents'
 import { useTags } from '@/hooks/useTags'
 import { EventCard } from '@/components/EventCard'
+import { FilterPanel, type FilterPanelFilters } from '@/components/FilterPanel'
 import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
 
 export function EventsPage() {
   const [searchParams, setSearchParams] = useSearchParams()
-  const [searchInput, setSearchInput] = useState(searchParams.get('search') || '')
 
+  // Parse filters from URL
   const filters: EventFilters = {
     page: parseInt(searchParams.get('page') || '1', 10),
     pageSize: 20,
     search: searchParams.get('search') || undefined,
     tags: searchParams.get('tags') || undefined,
     adminPeriod: searchParams.get('adminPeriod') || undefined,
+    startDate: searchParams.get('startDate') || undefined,
+    endDate: searchParams.get('endDate') || undefined,
   }
 
   const { data, isLoading, error } = useEvents(filters)
@@ -25,43 +26,35 @@ export function EventsPage() {
   const pagination = data?.pagination
   const tags = tagsData?.data || []
 
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault()
-    const newParams = new URLSearchParams(searchParams)
-    if (searchInput.trim()) {
-      newParams.set('search', searchInput.trim())
-    } else {
-      newParams.delete('search')
-    }
-    newParams.set('page', '1')
-    setSearchParams(newParams)
+  // Convert filters to FilterPanel format
+  const panelFilters: FilterPanelFilters = {
+    search: filters.search,
+    startDate: filters.startDate,
+    endDate: filters.endDate,
+    adminPeriod: filters.adminPeriod,
+    tags: filters.tags?.split(',').filter(Boolean),
   }
 
-  const handleTagFilter = (tagId: string) => {
-    const newParams = new URLSearchParams(searchParams)
-    const currentTags = newParams.get('tags')?.split(',').filter(Boolean) || []
+  const handleFiltersChange = (newFilters: FilterPanelFilters) => {
+    const newParams = new URLSearchParams()
 
-    if (currentTags.includes(tagId)) {
-      const filtered = currentTags.filter((id) => id !== tagId)
-      if (filtered.length > 0) {
-        newParams.set('tags', filtered.join(','))
-      } else {
-        newParams.delete('tags')
-      }
-    } else {
-      newParams.set('tags', [...currentTags, tagId].join(','))
+    if (newFilters.search) {
+      newParams.set('search', newFilters.search)
     }
-    newParams.set('page', '1')
-    setSearchParams(newParams)
-  }
+    if (newFilters.startDate) {
+      newParams.set('startDate', newFilters.startDate)
+    }
+    if (newFilters.endDate) {
+      newParams.set('endDate', newFilters.endDate)
+    }
+    if (newFilters.adminPeriod) {
+      newParams.set('adminPeriod', newFilters.adminPeriod)
+    }
+    if (newFilters.tags && newFilters.tags.length > 0) {
+      newParams.set('tags', newFilters.tags.join(','))
+    }
 
-  const handleAdminPeriodFilter = (period: string | null) => {
-    const newParams = new URLSearchParams(searchParams)
-    if (period) {
-      newParams.set('adminPeriod', period)
-    } else {
-      newParams.delete('adminPeriod')
-    }
+    // Reset to page 1 when filters change
     newParams.set('page', '1')
     setSearchParams(newParams)
   }
@@ -72,13 +65,13 @@ export function EventsPage() {
     setSearchParams(newParams)
   }
 
-  const clearFilters = () => {
-    setSearchInput('')
-    setSearchParams(new URLSearchParams())
-  }
-
   const selectedTags = filters.tags?.split(',').filter(Boolean) || []
-  const hasFilters = filters.search || selectedTags.length > 0 || filters.adminPeriod
+  const hasFilters =
+    filters.search ||
+    filters.startDate ||
+    filters.endDate ||
+    selectedTags.length > 0 ||
+    filters.adminPeriod
 
   if (error) {
     return (
@@ -93,77 +86,22 @@ export function EventsPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-bold">Events</h1>
-        <Link to="/events/new">
-          <Button>+ New Event</Button>
-        </Link>
+        <div className="flex gap-2">
+          <Link to="/events/bulk-upload">
+            <Button variant="outline">Bulk Import</Button>
+          </Link>
+          <Link to="/events/new">
+            <Button>+ New Event</Button>
+          </Link>
+        </div>
       </div>
 
       {/* Filters */}
-      <div className="space-y-4">
-        {/* Search */}
-        <form onSubmit={handleSearch} className="flex gap-2">
-          <Input
-            type="search"
-            placeholder="Search events..."
-            value={searchInput}
-            onChange={(e) => setSearchInput(e.target.value)}
-            className="max-w-sm"
-          />
-          <Button type="submit" variant="secondary">
-            Search
-          </Button>
-          {hasFilters && (
-            <Button type="button" variant="ghost" onClick={clearFilters}>
-              Clear
-            </Button>
-          )}
-        </form>
-
-        {/* Admin Period Filter */}
-        <div className="flex gap-2">
-          <Button
-            variant={!filters.adminPeriod ? 'default' : 'outline'}
-            size="sm"
-            onClick={() => handleAdminPeriodFilter(null)}
-          >
-            All Periods
-          </Button>
-          <Button
-            variant={filters.adminPeriod === 'TRUMP_1' ? 'default' : 'outline'}
-            size="sm"
-            onClick={() => handleAdminPeriodFilter('TRUMP_1')}
-          >
-            Trump 1
-          </Button>
-          <Button
-            variant={filters.adminPeriod === 'TRUMP_2' ? 'default' : 'outline'}
-            size="sm"
-            onClick={() => handleAdminPeriodFilter('TRUMP_2')}
-          >
-            Trump 2
-          </Button>
-        </div>
-
-        {/* Tag Filter */}
-        {tags.length > 0 && (
-          <div className="flex flex-wrap gap-2">
-            {tags.map((tag) => (
-              <button
-                key={tag.id}
-                onClick={() => handleTagFilter(tag.id)}
-                className="inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-medium transition-all"
-                style={{
-                  backgroundColor: selectedTags.includes(tag.id) ? tag.color : `${tag.color}20`,
-                  color: selectedTags.includes(tag.id) ? 'white' : tag.color,
-                  border: `1px solid ${tag.color}`,
-                }}
-              >
-                {tag.name}
-              </button>
-            ))}
-          </div>
-        )}
-      </div>
+      <FilterPanel
+        filters={panelFilters}
+        availableTags={tags}
+        onFiltersChange={handleFiltersChange}
+      />
 
       {/* Results */}
       {isLoading ? (

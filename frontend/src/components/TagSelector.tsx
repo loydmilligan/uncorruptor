@@ -2,15 +2,22 @@ import { useState } from 'react'
 import { useTags } from '@/hooks/useTags'
 import { TagBadge } from './TagBadge'
 import { cn } from '@/lib/utils'
-import type { Tag } from '@/services/api'
 
 interface TagSelectorProps {
   selectedTagIds: string[]
   onChange: (tagIds: string[]) => void
+  primaryTagId?: string
+  onPrimaryChange?: (tagId: string | undefined) => void
   className?: string
 }
 
-export function TagSelector({ selectedTagIds, onChange, className }: TagSelectorProps) {
+export function TagSelector({
+  selectedTagIds,
+  onChange,
+  primaryTagId,
+  onPrimaryChange,
+  className,
+}: TagSelectorProps) {
   const [isOpen, setIsOpen] = useState(false)
   const { data: tagsResponse, isLoading } = useTags()
 
@@ -24,6 +31,16 @@ export function TagSelector({ selectedTagIds, onChange, className }: TagSelector
 
   const handleRemove = (tagId: string) => {
     onChange(selectedTagIds.filter((id) => id !== tagId))
+    // If removing the primary tag, clear it
+    if (tagId === primaryTagId && onPrimaryChange) {
+      onPrimaryChange(undefined)
+    }
+  }
+
+  const handleSetPrimary = (tagId: string) => {
+    if (onPrimaryChange) {
+      onPrimaryChange(tagId === primaryTagId ? undefined : tagId)
+    }
   }
 
   return (
@@ -31,14 +48,38 @@ export function TagSelector({ selectedTagIds, onChange, className }: TagSelector
       {/* Selected tags */}
       <div className="flex flex-wrap gap-1.5 mb-2">
         {selectedTags.map((tag) => (
-          <TagBadge
-            key={tag.id}
-            name={tag.name}
-            color={tag.color}
-            onRemove={() => handleRemove(tag.id)}
-          />
+          <div key={tag.id} className="group relative">
+            <TagBadge
+              name={tag.name}
+              color={tag.color}
+              isPrimary={tag.id === primaryTagId}
+              onRemove={() => handleRemove(tag.id)}
+            />
+            {onPrimaryChange && (
+              <button
+                type="button"
+                onClick={() => handleSetPrimary(tag.id)}
+                className={cn(
+                  'absolute -top-1 -left-1 w-4 h-4 rounded-full text-[10px] font-bold',
+                  'flex items-center justify-center transition-all',
+                  tag.id === primaryTagId
+                    ? 'bg-yellow-500 text-white'
+                    : 'bg-gray-200 text-gray-500 opacity-0 group-hover:opacity-100'
+                )}
+                title={tag.id === primaryTagId ? 'Primary tag' : 'Set as primary'}
+              >
+                {tag.id === primaryTagId ? '★' : '☆'}
+              </button>
+            )}
+          </div>
         ))}
       </div>
+
+      {onPrimaryChange && selectedTags.length > 0 && (
+        <p className="text-xs text-muted-foreground mb-2">
+          Hover over a tag and click ☆ to set it as primary
+        </p>
+      )}
 
       {/* Dropdown trigger */}
       <button

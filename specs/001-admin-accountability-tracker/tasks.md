@@ -154,20 +154,20 @@
 
 ### Backend Implementation for US3
 
-- [ ] T068 [P] [US3] Create CounterNarrative types in `backend/src/models/counterNarrative.ts`
-- [ ] T069 [US3] Implement CounterNarrativeService in `backend/src/services/counterNarrativeService.ts`
-- [ ] T070 [US3] Create PUT /api/events/:id/counter-narrative endpoint in `backend/src/api/counterNarrative.ts`
-- [ ] T071 [US3] Create DELETE /api/events/:id/counter-narrative endpoint in `backend/src/api/counterNarrative.ts`
-- [ ] T072 [US3] Register counter-narrative routes in `backend/src/index.ts`
+- [x] T068 [P] [US3] Create CounterNarrative types in `backend/src/models/counterNarrative.ts`
+- [x] T069 [US3] Implement CounterNarrativeService in `backend/src/services/counterNarrativeService.ts`
+- [x] T070 [US3] Create PUT /api/events/:id/counter-narrative endpoint in `backend/src/api/counterNarrative.ts`
+- [x] T071 [US3] Create DELETE /api/events/:id/counter-narrative endpoint in `backend/src/api/counterNarrative.ts`
+- [x] T072 [US3] Register counter-narrative routes in `backend/src/index.ts`
 
 ### Frontend Implementation for US3
 
-- [ ] T073 [P] [US3] Create useCounterNarrative hook in `frontend/src/hooks/useCounterNarrative.ts`
-- [ ] T074 [P] [US3] Create StrengthRatingSelector component in `frontend/src/components/StrengthRatingSelector.tsx`
-- [ ] T075 [US3] Create CounterNarrativeForm component in `frontend/src/components/CounterNarrativeForm.tsx`
-- [ ] T076 [US3] Create CriticalAnalysisView component (side-by-side) in `frontend/src/components/CriticalAnalysisView.tsx`
-- [ ] T077 [US3] Integrate CounterNarrativeForm into EventDetailPage in `frontend/src/pages/EventDetailPage.tsx`
-- [ ] T078 [US3] Add critical analysis mode toggle to EventDetailPage in `frontend/src/pages/EventDetailPage.tsx`
+- [x] T073 [P] [US3] Create useCounterNarrative hook in `frontend/src/hooks/useCounterNarrative.ts`
+- [x] T074 [P] [US3] Create StrengthRatingSelector component in `frontend/src/components/StrengthRatingSelector.tsx`
+- [x] T075 [US3] Create CounterNarrativeForm component in `frontend/src/components/CounterNarrativeForm.tsx`
+- [x] T076 [US3] Create CriticalAnalysisView component (side-by-side) in `frontend/src/components/CriticalAnalysisView.tsx`
+- [x] T077 [US3] Integrate CounterNarrativeForm into EventDetailPage in `frontend/src/pages/EventDetailPage.tsx`
+- [x] T078 [US3] Add critical analysis mode toggle to EventDetailPage in `frontend/src/pages/EventDetailPage.tsx`
 
 **Checkpoint**: Users can add counter-narratives and view critical analysis comparison
 
@@ -181,22 +181,22 @@
 
 ### Backend Implementation for US4
 
-- [ ] T079 [US4] Add full-text search to EventService in `backend/src/services/eventService.ts`
-- [ ] T080 [US4] Add tag filtering to GET /api/events in `backend/src/api/events.ts`
-- [ ] T081 [US4] Add date range filtering to GET /api/events in `backend/src/api/events.ts`
-- [ ] T082 [US4] Add admin period filtering to GET /api/events in `backend/src/api/events.ts`
-- [ ] T083 [US4] Add combined filter support to GET /api/events in `backend/src/api/events.ts`
-- [ ] T084 [US4] Create database migration for full-text search index in `backend/prisma/migrations/`
+- [x] T079 [US4] Add full-text search to EventService in `backend/src/services/eventService.ts`
+- [x] T080 [US4] Add tag filtering to GET /api/events in `backend/src/api/events.ts`
+- [x] T081 [US4] Add date range filtering to GET /api/events in `backend/src/api/events.ts`
+- [x] T082 [US4] Add admin period filtering to GET /api/events in `backend/src/api/events.ts`
+- [x] T083 [US4] Add combined filter support to GET /api/events in `backend/src/api/events.ts`
+- [x] T084 [US4] Create database migration for full-text search index in `backend/prisma/migrations/`
 
 ### Frontend Implementation for US4
 
-- [ ] T085 [P] [US4] Create SearchInput component in `frontend/src/components/SearchInput.tsx`
-- [ ] T086 [P] [US4] Create DateRangeFilter component in `frontend/src/components/DateRangeFilter.tsx`
-- [ ] T087 [P] [US4] Create AdminPeriodFilter component in `frontend/src/components/AdminPeriodFilter.tsx`
-- [ ] T088 [US4] Create FilterPanel component combining all filters in `frontend/src/components/FilterPanel.tsx`
-- [ ] T089 [US4] Integrate FilterPanel into EventsPage in `frontend/src/pages/EventsPage.tsx`
-- [ ] T090 [US4] Update useEvents hook to support filter parameters in `frontend/src/hooks/useEvents.ts`
-- [ ] T091 [US4] Add URL query param sync for filters in `frontend/src/pages/EventsPage.tsx`
+- [x] T085 [P] [US4] Create SearchInput component in `frontend/src/components/SearchInput.tsx`
+- [x] T086 [P] [US4] Create DateRangeFilter component in `frontend/src/components/DateRangeFilter.tsx`
+- [x] T087 [P] [US4] Create AdminPeriodFilter component in `frontend/src/components/AdminPeriodFilter.tsx`
+- [x] T088 [US4] Create FilterPanel component combining all filters in `frontend/src/components/FilterPanel.tsx`
+- [x] T089 [US4] Integrate FilterPanel into EventsPage in `frontend/src/pages/EventsPage.tsx`
+- [x] T090 [US4] Update useEvents hook to support filter parameters in `frontend/src/hooks/useEvents.ts`
+- [x] T091 [US4] Add URL query param sync for filters in `frontend/src/pages/EventsPage.tsx`
 
 **Checkpoint**: Users can search and filter events by multiple criteria
 

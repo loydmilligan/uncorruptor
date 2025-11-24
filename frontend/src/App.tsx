@@ -4,6 +4,7 @@ import { Layout } from './components/Layout'
 import { EventsPage } from './pages/EventsPage'
 import { EventDetailPage } from './pages/EventDetailPage'
 import { CreateEventPage } from './pages/CreateEventPage'
+import { BulkUploadPage } from './pages/BulkUploadPage'
 
 // Placeholder page - will be implemented in Phase 8
 function DashboardPage() {
@@ -45,6 +46,7 @@ export function App() {
             <Route path="/" element={<Navigate to="/events" replace />} />
             <Route path="/events" element={<EventsPage />} />
             <Route path="/events/new" element={<CreateEventPage />} />
+            <Route path="/events/bulk-upload" element={<BulkUploadPage />} />
             <Route path="/events/:id" element={<EventDetailPage />} />
             <Route path="/dashboard" element={<DashboardPage />} />
             <Route path="*" element={<NotFoundPage />} />

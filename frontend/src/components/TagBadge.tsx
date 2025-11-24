@@ -4,14 +4,16 @@ interface TagBadgeProps {
   name: string
   color: string
   className?: string
+  isPrimary?: boolean
   onRemove?: () => void
 }
 
-export function TagBadge({ name, color, className, onRemove }: TagBadgeProps) {
+export function TagBadge({ name, color, className, isPrimary, onRemove }: TagBadgeProps) {
   return (
     <span
       className={cn(
         'inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-medium',
+        isPrimary && 'ring-2 ring-yellow-500 ring-offset-1',
         className
       )}
       style={{

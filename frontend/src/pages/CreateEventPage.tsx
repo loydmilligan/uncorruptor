@@ -10,8 +10,10 @@ export function CreateEventPage() {
   const handleSubmit = async (data: {
     title: string
     description?: string
-    eventDate: string
+    startDate: string
+    endDate?: string
     tagIds: string[]
+    primaryTagId?: string
   }) => {
     try {
       const result = await createEvent.mutateAsync(data)

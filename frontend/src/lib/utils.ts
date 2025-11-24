@@ -13,6 +13,28 @@ export function formatDate(date: string | Date): string {
   })
 }
 
+export function formatDateRange(startDate: string, endDate: string | null): string {
+  const start = formatDate(startDate)
+  if (!endDate) {
+    return start
+  }
+  const end = formatDate(endDate)
+  if (start === end) {
+    return start
+  }
+  // Check if same year - show shortened format
+  const startYear = new Date(startDate).getFullYear()
+  const endYear = new Date(endDate).getFullYear()
+  if (startYear === endYear) {
+    const startShort = new Date(startDate).toLocaleDateString('en-US', {
+      month: 'short',
+      day: 'numeric',
+    })
+    return `${startShort} - ${end}`
+  }
+  return `${start} - ${end}`
+}
+
 export function formatDateTime(date: string | Date): string {
   return new Date(date).toLocaleString('en-US', {
     year: 'numeric',
