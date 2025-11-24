@@ -1,0 +1,863 @@
+openapi: 3.0.3
+info:
+  title: Administration Accountability Tracker API
+  description: REST API for tracking political accountability events with sources, tags, and counter-narratives.
+  version: 1.0.0
+  contact:
+    name: API Support
+
+servers:
+  - url: http://localhost:3000/api
+    description: Local development server
+
+tags:
+  - name: Events
+    description: Event management operations
+  - name: Sources
+    description: Source management for events
+  - name: Tags
+    description: Tag management
+  - name: Counter-Narratives
+    description: Counter-narrative management
+  - name: Dashboard
+    description: Dashboard and analytics endpoints
+  - name: Publications
+    description: Publication reference data
+
+paths:
+  /events:
+    get:
+      tags: [Events]
+      summary: List events with filtering
+      description: Retrieve a paginated list of events with optional filters
+      parameters:
+        - name: search
+          in: query
+          description: Full-text search query
+          schema:
+            type: string
+        - name: tags
+          in: query
+          description: Comma-separated tag names to filter by
+          schema:
+            type: string
+        - name: adminPeriod
+          in: query
+          description: Filter by administration period
+          schema:
+            $ref: '#/components/schemas/AdminPeriod'
+        - name: dateFrom
+          in: query
+          description: Filter events on or after this date
+          schema:
+            type: string
+            format: date
+        - name: dateTo
+          in: query
+          description: Filter events on or before this date
+          schema:
+            type: string
+            format: date
+        - name: page
+          in: query
+          description: Page number (1-indexed)
+          schema:
+            type: integer
+            default: 1
+            minimum: 1
+        - name: limit
+          in: query
+          description: Items per page
+          schema:
+            type: integer
+            default: 20
+            minimum: 1
+            maximum: 100
+        - name: sort
+          in: query
+          description: Sort field
+          schema:
+            type: string
+            enum: [eventDate, createdAt, title]
+            default: eventDate
+        - name: order
+          in: query
+          description: Sort order
+          schema:
+            type: string
+            enum: [asc, desc]
+            default: desc
+      responses:
+        '200':
+          description: Paginated list of events
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EventListResponse'
+
+    post:
+      tags: [Events]
+      summary: Create a new event
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateEventRequest'
+      responses:
+        '201':
+          description: Event created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Event'
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /events/{eventId}:
+    parameters:
+      - name: eventId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+
+    get:
+      tags: [Events]
+      summary: Get event details
+      description: Retrieve a single event with all related data (tags, sources, counter-narrative)
+      responses:
+        '200':
+          description: Event details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EventDetail'
+        '404':
+          description: Event not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+    put:
+      tags: [Events]
+      summary: Update an event
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateEventRequest'
+      responses:
+        '200':
+          description: Event updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Event'
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Event not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+    delete:
+      tags: [Events]
+      summary: Delete an event
+      responses:
+        '204':
+          description: Event deleted successfully
+        '404':
+          description: Event not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /events/{eventId}/sources:
+    parameters:
+      - name: eventId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+
+    post:
+      tags: [Sources]
+      summary: Add a source to an event
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateSourceRequest'
+      responses:
+        '201':
+          description: Source added successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Source'
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Event not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /events/{eventId}/sources/{sourceId}:
+    parameters:
+      - name: eventId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: sourceId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+
+    put:
+      tags: [Sources]
+      summary: Update a source
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateSourceRequest'
+      responses:
+        '200':
+          description: Source updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Source'
+        '404':
+          description: Source or event not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+    delete:
+      tags: [Sources]
+      summary: Remove a source from an event
+      responses:
+        '204':
+          description: Source removed successfully
+        '404':
+          description: Source or event not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /events/{eventId}/counter-narrative:
+    parameters:
+      - name: eventId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+
+    put:
+      tags: [Counter-Narratives]
+      summary: Add or update counter-narrative
+      description: Creates a new counter-narrative if none exists, or updates the existing one
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CounterNarrativeRequest'
+      responses:
+        '200':
+          description: Counter-narrative saved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CounterNarrative'
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Event not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+    delete:
+      tags: [Counter-Narratives]
+      summary: Remove counter-narrative from event
+      responses:
+        '204':
+          description: Counter-narrative removed successfully
+        '404':
+          description: Event or counter-narrative not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /tags:
+    get:
+      tags: [Tags]
+      summary: List all tags
+      description: Retrieve all available tags, including defaults and custom
+      responses:
+        '200':
+          description: List of tags
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Tag'
+
+    post:
+      tags: [Tags]
+      summary: Create a custom tag
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateTagRequest'
+      responses:
+        '201':
+          description: Tag created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tag'
+        '400':
+          description: Validation error (e.g., duplicate name)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /tags/{tagId}:
+    parameters:
+      - name: tagId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+
+    delete:
+      tags: [Tags]
+      summary: Delete a custom tag
+      description: Only custom tags can be deleted. Default tags cannot be removed.
+      responses:
+        '204':
+          description: Tag deleted successfully
+        '400':
+          description: Cannot delete default tag
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Tag not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /publications:
+    get:
+      tags: [Publications]
+      summary: List known publications
+      description: Retrieve reference data for known publications with default bias ratings
+      parameters:
+        - name: search
+          in: query
+          description: Search by name or domain
+          schema:
+            type: string
+      responses:
+        '200':
+          description: List of publications
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Publication'
+
+  /publications/lookup:
+    get:
+      tags: [Publications]
+      summary: Lookup publication by URL
+      description: Extract domain from URL and return matching publication if known
+      parameters:
+        - name: url
+          in: query
+          required: true
+          description: URL to lookup
+          schema:
+            type: string
+            format: uri
+      responses:
+        '200':
+          description: Publication found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Publication'
+        '404':
+          description: Publication not found for this domain
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /dashboard/summary:
+    get:
+      tags: [Dashboard]
+      summary: Get dashboard summary
+      description: Retrieve aggregated statistics for the dashboard
+      responses:
+        '200':
+          description: Dashboard summary data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DashboardSummary'
+
+  /dashboard/timeline:
+    get:
+      tags: [Dashboard]
+      summary: Get timeline data
+      description: Retrieve event counts grouped by month for timeline visualization
+      parameters:
+        - name: adminPeriod
+          in: query
+          description: Filter by administration period
+          schema:
+            $ref: '#/components/schemas/AdminPeriod'
+      responses:
+        '200':
+          description: Timeline data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TimelineData'
+
+  /dashboard/comparison:
+    get:
+      tags: [Dashboard]
+      summary: Get administration comparison
+      description: Retrieve side-by-side comparison metrics for Trump Admin 1 vs Admin 2
+      responses:
+        '200':
+          description: Comparison data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ComparisonData'
+
+components:
+  schemas:
+    AdminPeriod:
+      type: string
+      enum: [TRUMP_1, TRUMP_2, OTHER]
+      description: Administration period
+
+    StrengthRating:
+      type: string
+      enum: [weak, moderate, strong]
+      description: Strength rating for arguments
+
+    BiasRating:
+      type: integer
+      minimum: -3
+      maximum: 3
+      description: Political bias rating (-3=far left, 0=center, 3=far right)
+
+    Event:
+      type: object
+      required: [id, title, eventDate, adminPeriod, createdAt, updatedAt]
+      properties:
+        id:
+          type: string
+          format: uuid
+        title:
+          type: string
+          maxLength: 500
+        description:
+          type: string
+          nullable: true
+        eventDate:
+          type: string
+          format: date
+        adminPeriod:
+          $ref: '#/components/schemas/AdminPeriod'
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/Tag'
+
+    EventDetail:
+      allOf:
+        - $ref: '#/components/schemas/Event'
+        - type: object
+          properties:
+            sources:
+              type: array
+              items:
+                $ref: '#/components/schemas/Source'
+            counterNarrative:
+              $ref: '#/components/schemas/CounterNarrative'
+              nullable: true
+
+    CreateEventRequest:
+      type: object
+      required: [title, eventDate]
+      properties:
+        title:
+          type: string
+          maxLength: 500
+          minLength: 1
+        description:
+          type: string
+          nullable: true
+        eventDate:
+          type: string
+          format: date
+        tagIds:
+          type: array
+          items:
+            type: string
+            format: uuid
+          description: Tag IDs to assign
+
+    UpdateEventRequest:
+      type: object
+      properties:
+        title:
+          type: string
+          maxLength: 500
+          minLength: 1
+        description:
+          type: string
+          nullable: true
+        eventDate:
+          type: string
+          format: date
+        tagIds:
+          type: array
+          items:
+            type: string
+            format: uuid
+
+    EventListResponse:
+      type: object
+      required: [data, pagination]
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Event'
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+
+    Pagination:
+      type: object
+      required: [page, limit, total, totalPages]
+      properties:
+        page:
+          type: integer
+        limit:
+          type: integer
+        total:
+          type: integer
+        totalPages:
+          type: integer
+
+    Tag:
+      type: object
+      required: [id, name, color, isDefault, createdAt]
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+          maxLength: 100
+        description:
+          type: string
+          maxLength: 500
+          nullable: true
+        color:
+          type: string
+          pattern: '^#[0-9A-Fa-f]{6}$'
+        isDefault:
+          type: boolean
+        createdAt:
+          type: string
+          format: date-time
+
+    CreateTagRequest:
+      type: object
+      required: [name]
+      properties:
+        name:
+          type: string
+          maxLength: 100
+          pattern: '^[a-z0-9-]+$'
+        description:
+          type: string
+          maxLength: 500
+        color:
+          type: string
+          pattern: '^#[0-9A-Fa-f]{6}$'
+          default: '#6B7280'
+
+    Source:
+      type: object
+      required: [id, eventId, url, biasRating, dateAccessed, isArchived, createdAt]
+      properties:
+        id:
+          type: string
+          format: uuid
+        eventId:
+          type: string
+          format: uuid
+        publicationId:
+          type: string
+          format: uuid
+          nullable: true
+        url:
+          type: string
+          format: uri
+          maxLength: 2048
+        articleTitle:
+          type: string
+          maxLength: 500
+          nullable: true
+        biasRating:
+          $ref: '#/components/schemas/BiasRating'
+        dateAccessed:
+          type: string
+          format: date
+        isArchived:
+          type: boolean
+        createdAt:
+          type: string
+          format: date-time
+        publication:
+          $ref: '#/components/schemas/Publication'
+          nullable: true
+
+    CreateSourceRequest:
+      type: object
+      required: [url, biasRating]
+      properties:
+        url:
+          type: string
+          format: uri
+          maxLength: 2048
+        articleTitle:
+          type: string
+          maxLength: 500
+        biasRating:
+          $ref: '#/components/schemas/BiasRating'
+
+    UpdateSourceRequest:
+      type: object
+      properties:
+        articleTitle:
+          type: string
+          maxLength: 500
+        biasRating:
+          $ref: '#/components/schemas/BiasRating'
+        isArchived:
+          type: boolean
+
+    Publication:
+      type: object
+      required: [id, name, domain, defaultBias]
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+          maxLength: 200
+        domain:
+          type: string
+          maxLength: 253
+        defaultBias:
+          $ref: '#/components/schemas/BiasRating'
+        credibility:
+          type: string
+          enum: [high, mixed, low]
+          nullable: true
+
+    CounterNarrative:
+      type: object
+      required: [id, eventId, narrativeText, adminStrength, concernStrength, createdAt, updatedAt]
+      properties:
+        id:
+          type: string
+          format: uuid
+        eventId:
+          type: string
+          format: uuid
+        narrativeText:
+          type: string
+          minLength: 1
+        adminStrength:
+          $ref: '#/components/schemas/StrengthRating'
+        concernStrength:
+          $ref: '#/components/schemas/StrengthRating'
+        sourceRefs:
+          type: string
+          nullable: true
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    CounterNarrativeRequest:
+      type: object
+      required: [narrativeText, adminStrength, concernStrength]
+      properties:
+        narrativeText:
+          type: string
+          minLength: 1
+        adminStrength:
+          $ref: '#/components/schemas/StrengthRating'
+        concernStrength:
+          $ref: '#/components/schemas/StrengthRating'
+        sourceRefs:
+          type: string
+          nullable: true
+
+    DashboardSummary:
+      type: object
+      required: [totalEvents, eventsByTag, eventsByPeriod]
+      properties:
+        totalEvents:
+          type: integer
+        totalSources:
+          type: integer
+        eventsWithCounterNarrative:
+          type: integer
+        eventsByTag:
+          type: array
+          items:
+            type: object
+            properties:
+              tagName:
+                type: string
+              tagColor:
+                type: string
+              count:
+                type: integer
+        eventsByPeriod:
+          type: object
+          properties:
+            TRUMP_1:
+              type: integer
+            TRUMP_2:
+              type: integer
+            OTHER:
+              type: integer
+
+    TimelineData:
+      type: object
+      required: [data]
+      properties:
+        data:
+          type: array
+          items:
+            type: object
+            properties:
+              month:
+                type: string
+                format: date
+                description: First day of the month
+              count:
+                type: integer
+
+    ComparisonData:
+      type: object
+      required: [trump1, trump2]
+      properties:
+        trump1:
+          $ref: '#/components/schemas/PeriodStats'
+        trump2:
+          $ref: '#/components/schemas/PeriodStats'
+
+    PeriodStats:
+      type: object
+      properties:
+        totalEvents:
+          type: integer
+        totalSources:
+          type: integer
+        eventsByTag:
+          type: array
+          items:
+            type: object
+            properties:
+              tagName:
+                type: string
+              count:
+                type: integer
+        averageSourcesPerEvent:
+          type: number
+          format: float
+
+    ErrorResponse:
+      type: object
+      required: [error, message]
+      properties:
+        error:
+          type: string
+        message:
+          type: string
+        details:
+          type: object
+          additionalProperties: true
