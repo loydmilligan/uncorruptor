@@ -3,6 +3,8 @@ import cors from '@fastify/cors'
 import { swagger } from './plugins/swagger.js'
 import { eventRoutes } from './api/events.js'
 import { tagRoutes } from './api/tags.js'
+import { sourceRoutes } from './api/sources.js'
+import { publicationRoutes } from './api/publications.js'
 
 const fastify = Fastify({
   logger: {
@@ -38,9 +40,9 @@ async function main() {
   // API routes
   await fastify.register(eventRoutes, { prefix: '/api/events' })
   await fastify.register(tagRoutes, { prefix: '/api/tags' })
+  await fastify.register(sourceRoutes, { prefix: '/api/events' }) // Sources are nested under events
+  await fastify.register(publicationRoutes, { prefix: '/api/publications' })
   // Future routes:
-  // await fastify.register(sourceRoutes, { prefix: '/api/sources' })
-  // await fastify.register(publicationRoutes, { prefix: '/api/publications' })
   // await fastify.register(counterNarrativeRoutes, { prefix: '/api/counter-narratives' })
   // await fastify.register(dashboardRoutes, { prefix: '/api/dashboard' })
 

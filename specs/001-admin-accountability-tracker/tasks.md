@@ -119,28 +119,28 @@
 
 ### Backend Implementation for US2
 
-- [ ] T049 [P] [US2] Create Source types/interfaces in `backend/src/models/source.ts`
-- [ ] T050 [P] [US2] Create Publication types/interfaces in `backend/src/models/publication.ts`
-- [ ] T051 [US2] Implement SourceService with CRUD operations in `backend/src/services/sourceService.ts`
-- [ ] T052 [US2] Implement PublicationService with lookup in `backend/src/services/publicationService.ts`
-- [ ] T053 [US2] Create POST /api/events/:id/sources endpoint in `backend/src/api/sources.ts`
-- [ ] T054 [US2] Create PUT /api/events/:id/sources/:sourceId endpoint in `backend/src/api/sources.ts`
-- [ ] T055 [US2] Create DELETE /api/events/:id/sources/:sourceId endpoint in `backend/src/api/sources.ts`
-- [ ] T056 [US2] Create GET /api/publications endpoint in `backend/src/api/publications.ts`
-- [ ] T057 [US2] Create GET /api/publications/lookup endpoint in `backend/src/api/publications.ts`
-- [ ] T058 [US2] Register source and publication routes in `backend/src/index.ts`
-- [ ] T059 [US2] Add publication seed data (50+ sources) in `backend/prisma/seed.ts`
+- [x] T049 [P] [US2] Create Source types/interfaces in `backend/src/models/source.ts`
+- [x] T050 [P] [US2] Create Publication types/interfaces in `backend/src/models/publication.ts`
+- [x] T051 [US2] Implement SourceService with CRUD operations in `backend/src/services/sourceService.ts`
+- [x] T052 [US2] Implement PublicationService with lookup in `backend/src/services/publicationService.ts`
+- [x] T053 [US2] Create POST /api/events/:id/sources endpoint in `backend/src/api/sources.ts`
+- [x] T054 [US2] Create PUT /api/events/:id/sources/:sourceId endpoint in `backend/src/api/sources.ts`
+- [x] T055 [US2] Create DELETE /api/events/:id/sources/:sourceId endpoint in `backend/src/api/sources.ts`
+- [x] T056 [US2] Create GET /api/publications endpoint in `backend/src/api/publications.ts`
+- [x] T057 [US2] Create GET /api/publications/lookup endpoint in `backend/src/api/publications.ts`
+- [x] T058 [US2] Register source and publication routes in `backend/src/index.ts`
+- [x] T059 [US2] Add publication seed data (50+ sources) in `backend/prisma/seed.ts`
 
 ### Frontend Implementation for US2
 
-- [ ] T060 [P] [US2] Create useSources hook in `frontend/src/hooks/useSources.ts`
-- [ ] T061 [P] [US2] Create usePublications hook in `frontend/src/hooks/usePublications.ts`
-- [ ] T062 [P] [US2] Create BiasRatingBadge component in `frontend/src/components/BiasRatingBadge.tsx`
-- [ ] T063 [P] [US2] Create BiasRatingSelector component in `frontend/src/components/BiasRatingSelector.tsx`
-- [ ] T064 [US2] Create SourceForm component in `frontend/src/components/SourceForm.tsx`
-- [ ] T065 [US2] Create SourceList component in `frontend/src/components/SourceList.tsx`
-- [ ] T066 [US2] Integrate SourceList into EventDetailPage in `frontend/src/pages/EventDetailPage.tsx`
-- [ ] T067 [US2] Add source management UI to EventDetailPage in `frontend/src/pages/EventDetailPage.tsx`
+- [x] T060 [P] [US2] Create useSources hook in `frontend/src/hooks/useSources.ts`
+- [x] T061 [P] [US2] Create usePublications hook in `frontend/src/hooks/usePublications.ts`
+- [x] T062 [P] [US2] Create BiasRatingBadge component in `frontend/src/components/BiasRatingBadge.tsx`
+- [x] T063 [P] [US2] Create BiasRatingSelector component in `frontend/src/components/BiasRatingSelector.tsx`
+- [x] T064 [US2] Create SourceForm component in `frontend/src/components/SourceForm.tsx`
+- [x] T065 [US2] Create SourceList component in `frontend/src/components/SourceList.tsx`
+- [x] T066 [US2] Integrate SourceList into EventDetailPage in `frontend/src/pages/EventDetailPage.tsx`
+- [x] T067 [US2] Add source management UI to EventDetailPage in `frontend/src/pages/EventDetailPage.tsx`
 
 **Checkpoint**: Users can add sources with bias ratings to events. Both P1 stories complete!
 

@@ -3,6 +3,7 @@ import { useParams, useNavigate, Link } from 'react-router-dom'
 import { useEvent, useUpdateEvent, useDeleteEvent } from '@/hooks/useEvents'
 import { EventForm } from '@/components/EventForm'
 import { TagBadge } from '@/components/TagBadge'
+import { SourceList } from '@/components/SourceList'
 import { Button } from '@/components/ui/button'
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
 import { formatDate, getAdminPeriodLabel } from '@/lib/utils'
@@ -171,32 +172,16 @@ export function EventDetailPage() {
         </Card>
       )}
 
-      {/* Sources - placeholder for Phase 4 */}
+      {/* Sources */}
       <Card>
         <CardHeader>
           <CardTitle className="text-lg">Sources</CardTitle>
         </CardHeader>
         <CardContent>
-          {event.sources && event.sources.length > 0 ? (
-            <ul className="space-y-2">
-              {event.sources.map((source) => (
-                <li key={source.id} className="text-sm">
-                  <a
-                    href={source.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-primary hover:underline"
-                  >
-                    {source.articleTitle || source.url}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          ) : (
-            <p className="text-muted-foreground text-sm">
-              No sources added yet. (Source management will be added in Phase 4)
-            </p>
-          )}
+          <SourceList
+            eventId={event.id}
+            sources={event.sources || []}
+          />
         </CardContent>
       </Card>
 
