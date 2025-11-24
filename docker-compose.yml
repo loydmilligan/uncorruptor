@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   postgres:
     image: postgres:16-alpine
@@ -30,7 +28,7 @@ services:
       CORS_ORIGIN: http://localhost:5173
       NODE_ENV: development
     ports:
-      - "3000:3000"
+      - "3001:3000"
     depends_on:
       postgres:
         condition: service_healthy
@@ -44,7 +42,7 @@ services:
       dockerfile: Dockerfile
     container_name: accountability-frontend
     environment:
-      VITE_API_URL: http://localhost:3000/api
+      VITE_API_URL: http://localhost:3001/api
     ports:
       - "5173:5173"
     depends_on:
