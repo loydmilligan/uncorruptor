@@ -1,6 +1,8 @@
 import Fastify from 'fastify'
 import cors from '@fastify/cors'
 import { swagger } from './plugins/swagger.js'
+import { eventRoutes } from './api/events.js'
+import { tagRoutes } from './api/tags.js'
 
 const fastify = Fastify({
   logger: {
@@ -33,9 +35,10 @@ async function main() {
     return { status: 'ok', timestamp: new Date().toISOString() }
   })
 
-  // API routes will be registered here
-  // await fastify.register(eventRoutes, { prefix: '/api/events' })
-  // await fastify.register(tagRoutes, { prefix: '/api/tags' })
+  // API routes
+  await fastify.register(eventRoutes, { prefix: '/api/events' })
+  await fastify.register(tagRoutes, { prefix: '/api/tags' })
+  // Future routes:
   // await fastify.register(sourceRoutes, { prefix: '/api/sources' })
   // await fastify.register(publicationRoutes, { prefix: '/api/publications' })
   // await fastify.register(counterNarrativeRoutes, { prefix: '/api/counter-narratives' })

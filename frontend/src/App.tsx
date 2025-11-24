@@ -1,17 +1,11 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { Layout } from './components/Layout'
+import { EventsPage } from './pages/EventsPage'
+import { EventDetailPage } from './pages/EventDetailPage'
+import { CreateEventPage } from './pages/CreateEventPage'
 
-// Placeholder pages - will be implemented in later phases
-function EventsPage() {
-  return (
-    <div className="p-6">
-      <h1 className="text-2xl font-bold mb-4">Events</h1>
-      <p className="text-muted-foreground">Event list will be implemented in Phase 3 (US1)</p>
-    </div>
-  )
-}
-
+// Placeholder page - will be implemented in Phase 8
 function DashboardPage() {
   return (
     <div className="p-6">
@@ -50,8 +44,8 @@ export function App() {
           <Route element={<Layout />}>
             <Route path="/" element={<Navigate to="/events" replace />} />
             <Route path="/events" element={<EventsPage />} />
-            <Route path="/events/:id" element={<EventsPage />} />
-            <Route path="/events/new" element={<EventsPage />} />
+            <Route path="/events/new" element={<CreateEventPage />} />
+            <Route path="/events/:id" element={<EventDetailPage />} />
             <Route path="/dashboard" element={<DashboardPage />} />
             <Route path="*" element={<NotFoundPage />} />
           </Route>

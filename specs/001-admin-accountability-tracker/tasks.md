@@ -79,33 +79,33 @@
 
 ### Backend Implementation for US1
 
-- [ ] T025 [P] [US1] Create Event types/interfaces in `backend/src/models/event.ts`
-- [ ] T026 [P] [US1] Create Tag types/interfaces in `backend/src/models/tag.ts`
-- [ ] T027 [US1] Implement EventService with CRUD operations in `backend/src/services/eventService.ts`
-- [ ] T028 [US1] Implement TagService with list/create operations in `backend/src/services/tagService.ts`
-- [ ] T029 [US1] Create GET /api/events endpoint with pagination in `backend/src/api/events.ts`
-- [ ] T030 [US1] Create POST /api/events endpoint in `backend/src/api/events.ts`
-- [ ] T031 [US1] Create GET /api/events/:id endpoint in `backend/src/api/events.ts`
-- [ ] T032 [US1] Create PUT /api/events/:id endpoint in `backend/src/api/events.ts`
-- [ ] T033 [US1] Create DELETE /api/events/:id endpoint in `backend/src/api/events.ts`
-- [ ] T034 [US1] Create GET /api/tags endpoint in `backend/src/api/tags.ts`
-- [ ] T035 [US1] Create POST /api/tags endpoint for custom tags in `backend/src/api/tags.ts`
-- [ ] T036 [US1] Create DELETE /api/tags/:id endpoint in `backend/src/api/tags.ts`
-- [ ] T037 [US1] Register event and tag routes in `backend/src/index.ts`
+- [x] T025 [P] [US1] Create Event types/interfaces in `backend/src/models/event.ts`
+- [x] T026 [P] [US1] Create Tag types/interfaces in `backend/src/models/tag.ts`
+- [x] T027 [US1] Implement EventService with CRUD operations in `backend/src/services/eventService.ts`
+- [x] T028 [US1] Implement TagService with list/create operations in `backend/src/services/tagService.ts`
+- [x] T029 [US1] Create GET /api/events endpoint with pagination in `backend/src/api/events.ts`
+- [x] T030 [US1] Create POST /api/events endpoint in `backend/src/api/events.ts`
+- [x] T031 [US1] Create GET /api/events/:id endpoint in `backend/src/api/events.ts`
+- [x] T032 [US1] Create PUT /api/events/:id endpoint in `backend/src/api/events.ts`
+- [x] T033 [US1] Create DELETE /api/events/:id endpoint in `backend/src/api/events.ts`
+- [x] T034 [US1] Create GET /api/tags endpoint in `backend/src/api/tags.ts`
+- [x] T035 [US1] Create POST /api/tags endpoint for custom tags in `backend/src/api/tags.ts`
+- [x] T036 [US1] Create DELETE /api/tags/:id endpoint in `backend/src/api/tags.ts`
+- [x] T037 [US1] Register event and tag routes in `backend/src/index.ts`
 
 ### Frontend Implementation for US1
 
-- [ ] T038 [P] [US1] Create useEvents hook with React Query in `frontend/src/hooks/useEvents.ts`
-- [ ] T039 [P] [US1] Create useTags hook with React Query in `frontend/src/hooks/useTags.ts`
-- [ ] T040 [P] [US1] Create TagBadge component in `frontend/src/components/TagBadge.tsx`
-- [ ] T041 [P] [US1] Create TagSelector multi-select component in `frontend/src/components/TagSelector.tsx`
-- [ ] T042 [US1] Create EventForm component (create/edit) in `frontend/src/components/EventForm.tsx`
-- [ ] T043 [US1] Create EventCard list item component in `frontend/src/components/EventCard.tsx`
-- [ ] T044 [US1] Create EventList page in `frontend/src/pages/EventsPage.tsx`
-- [ ] T045 [US1] Create EventDetail page in `frontend/src/pages/EventDetailPage.tsx`
-- [ ] T046 [US1] Create CreateEvent page/modal in `frontend/src/pages/CreateEventPage.tsx`
-- [ ] T047 [US1] Add routes for events pages in `frontend/src/App.tsx`
-- [ ] T048 [US1] Add navigation links to Layout in `frontend/src/components/Layout.tsx`
+- [x] T038 [P] [US1] Create useEvents hook with React Query in `frontend/src/hooks/useEvents.ts`
+- [x] T039 [P] [US1] Create useTags hook with React Query in `frontend/src/hooks/useTags.ts`
+- [x] T040 [P] [US1] Create TagBadge component in `frontend/src/components/TagBadge.tsx`
+- [x] T041 [P] [US1] Create TagSelector multi-select component in `frontend/src/components/TagSelector.tsx`
+- [x] T042 [US1] Create EventForm component (create/edit) in `frontend/src/components/EventForm.tsx`
+- [x] T043 [US1] Create EventCard list item component in `frontend/src/components/EventCard.tsx`
+- [x] T044 [US1] Create EventList page in `frontend/src/pages/EventsPage.tsx`
+- [x] T045 [US1] Create EventDetail page in `frontend/src/pages/EventDetailPage.tsx`
+- [x] T046 [US1] Create CreateEvent page/modal in `frontend/src/pages/CreateEventPage.tsx`
+- [x] T047 [US1] Add routes for events pages in `frontend/src/App.tsx`
+- [x] T048 [US1] Add navigation links to Layout in `frontend/src/components/Layout.tsx`
 
 **Checkpoint**: Users can create, view, edit, and delete events with tags. MVP complete!
 
