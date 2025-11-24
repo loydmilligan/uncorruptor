@@ -1,0 +1,182 @@
+{
+  "dataset_metadata": {
+    "title": "Trump Administration Event Chronology (2017-2025)",
+    "description": "A curated dataset of 20 significant executive, legislative, and diplomatic events spanning the 45th and 47th Presidencies.",
+    "version": "1.0",
+    "author_persona": "Political Historian / Institutional Analyst"
+  },
+  "events":
+    },
+    {
+      "id": "EVT_2017_002",
+      "date": "2017-01-27",
+      "title": "Executive Order 13769 (The 'Travel Ban')",
+      "category": "Immigration & National Security",
+      "description": "An executive order suspending entry for citizens of seven Muslim-majority countries and halting the refugee program. Implemented without standard interagency review.",
+      "impact_analysis": "Triggered immediate chaos at international airports and mass protests. Initiated a protracted legal battle that defined the administration's adversarial relationship with the federal judiciary.",
+      "source_refs": [2]
+    },
+    {
+      "id": "EVT_2017_003",
+      "date": "2017-12-22",
+      "title": "Signing of the Tax Cuts and Jobs Act",
+      "category": "Economic Policy",
+      "description": "President Trump signs the most sweeping tax reform since 1986, lowering the corporate tax rate to 21% and altering individual income tax brackets.",
+      "impact_analysis": "Fueled a short-term stock market boom and corporate buybacks but significantly increased the federal deficit. solidified the Republican donor class's support for the administration.",
+      "source_refs": [3, 4]
+    },
+    {
+      "id": "EVT_2018_001",
+      "date": "2018-03-08",
+      "title": "Imposition of Section 232 Steel/Aluminum Tariffs",
+      "category": "Trade Policy",
+      "description": "Using national security justifications, the administration imposes global tariffs of 25% on steel and 10% on aluminum.",
+      "impact_analysis": "Alienated key allies like Canada and the EU, leading to retaliatory tariffs. Established the precedent that the executive branch could unilaterally tax imports under the guise of security.",
+      "source_refs": [8, 9]
+    },
+    {
+      "id": "EVT_2018_002",
+      "date": "2018-04-06",
+      "title": "Announcement of 'Zero Tolerance' Immigration Policy",
+      "category": "Immigration & Human Rights",
+      "description": "Attorney General Jeff Sessions announces a policy to criminally prosecute all illegal border crossers, necessitating the separation of children from parents.",
+      "impact_analysis": "Resulted in a humanitarian crisis with thousands of family separations. The lack of tracking infrastructure made reunification difficult, drawing global condemnation.",
+      "source_refs": [15, 16]
+    },
+    {
+      "id": "EVT_2018_003",
+      "date": "2018-05-14",
+      "title": "Opening of U.S. Embassy in Jerusalem",
+      "category": "Foreign Policy",
+      "description": "The U.S. formally relocates its embassy from Tel Aviv to Jerusalem, recognizing the city as Israel's capital.",
+      "impact_analysis": "Cemented the U.S.-Israel alliance under the Netanyahu government and pleased the Evangelical base, while severing diplomatic ties with the Palestinian leadership.",
+      "source_refs": [13, 14]
+    },
+    {
+      "id": "EVT_2018_004",
+      "date": "2018-06-12",
+      "title": "Singapore Summit (Trump-Kim Meeting)",
+      "category": "Diplomacy",
+      "description": "Historic first meeting between a sitting U.S. President and North Korean leader Kim Jong Un.",
+      "impact_analysis": "Legitimized the Kim regime on the global stage. Trump unilaterally suspended military exercises with South Korea, marking a shift toward personalistic diplomacy over alliance management.",
+      "source_refs": [10, 11]
+    },
+    {
+      "id": "EVT_2019_001",
+      "date": "2019-04-18",
+      "title": "Release of the Redacted Mueller Report",
+      "category": "Justice & Rule of Law",
+      "description": "The DOJ releases the Special Counsel's report on Russian interference. It finds no criminal conspiracy but outlines episodes of obstruction.",
+      "impact_analysis": "The administration's successful 'spin' of the report as exoneration demonstrated its mastery of media narratives and the politicization of the Justice Department.",
+      "source_refs": [21, 22]
+    },
+    {
+      "id": "EVT_2019_002",
+      "date": "2019-12-18",
+      "title": "First Impeachment of Donald Trump",
+      "category": "Constitutional Law",
+      "description": "The House votes to impeach the President for Abuse of Power regarding the withholding of Ukraine aid.",
+      "impact_analysis": "Formalized the partisan rupture in Washington. The subsequent acquittal emboldened the President's view of unlimited executive authority in foreign affairs.",
+      "source_refs": [24, 25]
+    },
+    {
+      "id": "EVT_2020_001",
+      "date": "2020-01-03",
+      "title": "Drone Strike Killing Qasem Soleimani",
+      "category": "Military & National Security",
+      "description": "A U.S. targeted strike kills the Iranian Quds Force commander in Baghdad.",
+      "impact_analysis": "Demonstrated a high risk tolerance for military escalation. Brought the U.S. and Iran to the brink of open war, redefining the rules of engagement in the Middle East proxy conflict.",
+      "source_refs": [26, 27]
+    },
+    {
+      "id": "EVT_2020_002",
+      "date": "2020-03-13",
+      "title": "COVID-19 National Emergency Declaration",
+      "category": "Crisis Management",
+      "description": "President Trump declares a National Emergency under the Stafford Act, unlocking federal funds for the pandemic response.",
+      "impact_analysis": "Marked the administration's forced pivot from denial to crisis management. Initiated a period of massive federal spending and conflict with state governors over lockdowns.",
+      "source_refs": [29, 30]
+    },
+    {
+      "id": "EVT_2020_003",
+      "date": "2020-06-01",
+      "title": "Lafayette Square Clearing / Bible Photo Op",
+      "category": "Civil Rights",
+      "description": "Federal forces forcibly clear peaceful protesters from Lafayette Square to allow the President to visit St. John's Church.",
+      "impact_analysis": "Symbolized the administration's 'Law and Order' response to civil unrest. Sparked a rift with military leadership over the politicization of the armed forces.",
+      "source_refs": [31, 32]
+    },
+    {
+      "id": "EVT_2021_001",
+      "date": "2021-01-13",
+      "title": "Second Impeachment of Donald Trump",
+      "category": "Constitutional Law",
+      "description": "The House impeaches the President for 'Incitement of Insurrection' following the January 6 Capitol attack.",
+      "impact_analysis": "Made Trump the first president in history to be impeached twice. Solidified his temporary isolation but set the stage for his 'revenge' narrative in the 2024 campaign.",
+      "source_refs": [33, 41]
+    },
+    {
+      "id": "EVT_2025_001",
+      "date": "2025-01-20",
+      "title": "Launch of Department of Government Efficiency (DOGE)",
+      "category": "Administrative Reform",
+      "description": "On his first day back in office, President Trump launches DOGE to dismantle federal bureaucracy, overseen by Elon Musk.",
+      "impact_analysis": "Operationalized the 'deconstruction of the administrative state.' Facilitated mass firings of civil servants via Schedule F, politicizing the federal workforce.",
+      "source_refs": [34]
+    },
+    {
+      "id": "EVT_2025_002",
+      "date": "2025-01-20",
+      "title": "EO 14151: Ending DEI Programs",
+      "category": "Social Policy",
+      "description": "An Executive Order banning Diversity, Equity, and Inclusion programs across the federal government and contractors.",
+      "impact_analysis": "Marked the aggressive use of federal power to fight the 'Culture War.' Forced widespread institutional changes in federal agencies and private contractors dependent on federal funds.",
+      "source_refs": [35]
+    },
+    {
+      "id": "EVT_2025_003",
+      "date": "2025-04-02",
+      "title": "Announcement of 'Liberation Day' Universal Tariffs",
+      "category": "Trade Policy",
+      "description": "The administration announces a universal 10% baseline tariff on all imports and a system of reciprocal tariffs.",
+      "impact_analysis": "Represented a shift to full autarky and protectionism. Disrupted global markets and forced a renegotiation of all U.S. trade relationships.",
+      "source_refs": [36]
+    },
+    {
+      "id": "EVT_2025_004",
+      "date": "2025-06-04",
+      "title": "Proclamation 10948 (Harvard University)",
+      "category": "Education & National Security",
+      "description": "A proclamation addressing 'national security risks' at Harvard University.",
+      "impact_analysis": "Signaled the administration's intent to target elite higher education institutions as political adversaries, utilizing national security as the legal mechanism.",
+      "source_refs": [35]
+    },
+    {
+      "id": "EVT_2025_005",
+      "date": "2025-11-01",
+      "title": "U.S.-China Trade Deal (Busan Agreement)",
+      "category": "Trade & Public Health",
+      "description": "A trade agreement reached in Busan where China agrees to halt fentanyl precursors in exchange for U.S. tariff relief.",
+      "impact_analysis": "Demonstrated the administration's strategy of linking trade wars to domestic social crises (opioids). Provided a temporary de-escalation of the 2025 trade conflict.",
+      "source_refs": [37]
+    },
+    {
+      "id": "EVT_2025_006",
+      "date": "2025-11-17",
+      "title": "Proposal to Rescind 'Public Charge' Rule",
+      "category": "Immigration",
+      "description": "DHS proposes a new rule to deny green cards to immigrants who might use any public benefits.",
+      "impact_analysis": "Reinstated the wealth test for legal immigration, shifting the demographic profile of eligible immigrants away from the working poor.",
+      "source_refs": [40]
+    },
+    {
+      "id": "EVT_2025_007",
+      "date": "2025-11-23",
+      "title": "Peace Plan Discussion with UK PM",
+      "category": "Geopolitics",
+      "description": "President Trump discusses a U.S. peace plan for Ukraine with UK Prime Minister Starmer, referencing Geneva talks.",
+      "impact_analysis": "Indicates the administration's active push for a negotiated settlement in Ukraine, likely involving concessions, consistent with an 'America First' retreat from foreign entanglements.",
+      "source_refs": [38]
+    }
+  ]
+}

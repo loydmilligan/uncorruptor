@@ -25,7 +25,6 @@ services:
       DATABASE_URL: postgresql://accountability:accountability_dev@postgres:5432/accountability_tracker
       PORT: 3000
       HOST: 0.0.0.0
-      CORS_ORIGIN: http://192.168.5.255:5173
       NODE_ENV: development
     ports:
       - "3001:3000"

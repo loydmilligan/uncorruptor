@@ -1,0 +1,193 @@
+{
+  "version": "1.0",
+  "metadata": {
+    "generatedBy": "Political Historian / Institutional Analyst",
+    "generatedAt": "2025-11-24T21:00:00Z",
+    "description": "A curated dataset of 20 significant executive, legislative, and diplomatic events spanning the 45th and 47th Presidencies."
+  },
+  "events": [
+    {
+      "title": "Executive Order 13769 (The 'Travel Ban')",
+      "startDate": "2017-01-27",
+      "description": "An executive order suspending entry for citizens of seven Muslim-majority countries and halting the refugee program. Implemented without standard interagency review.\n\n**Impact**: Triggered immediate chaos at international airports and mass protests. Initiated a protracted legal battle that defined the administration's adversarial relationship with the federal judiciary.",
+      "tags": [
+        "breaking-norms",
+        "constitutional-concerns"
+      ],
+      "primaryTag": "breaking-norms"
+    },
+    {
+      "title": "Signing of the Tax Cuts and Jobs Act",
+      "startDate": "2017-12-22",
+      "description": "President Trump signs the most sweeping tax reform since 1986, lowering the corporate tax rate to 21% and altering individual income tax brackets.\n\n**Impact**: Fueled a short-term stock market boom and corporate buybacks but significantly increased the federal deficit. solidified the Republican donor class's support for the administration.",
+      "tags": [
+        "divergent-from-historical-gop",
+        "policy-harm"
+      ],
+      "primaryTag": "divergent-from-historical-gop"
+    },
+    {
+      "title": "Imposition of Section 232 Steel/Aluminum Tariffs",
+      "startDate": "2018-03-08",
+      "description": "Using national security justifications, the administration imposes global tariffs of 25% on steel and 10% on aluminum.\n\n**Impact**: Alienated key allies like Canada and the EU, leading to retaliatory tariffs. Established the precedent that the executive branch could unilaterally tax imports under the guise of security.",
+      "tags": [
+        "breaking-norms",
+        "policy-harm"
+      ],
+      "primaryTag": "breaking-norms"
+    },
+    {
+      "title": "Announcement of 'Zero Tolerance' Immigration Policy",
+      "startDate": "2018-04-06",
+      "description": "Attorney General Jeff Sessions announces a policy to criminally prosecute all illegal border crossers, necessitating the separation of children from parents.\n\n**Impact**: Resulted in a humanitarian crisis with thousands of family separations. The lack of tracking infrastructure made reunification difficult, drawing global condemnation.",
+      "tags": [
+        "constitutional-concerns",
+        "policy-harm"
+      ],
+      "primaryTag": "constitutional-concerns"
+    },
+    {
+      "title": "Opening of U.S. Embassy in Jerusalem",
+      "startDate": "2018-05-14",
+      "description": "The U.S. formally relocates its embassy from Tel Aviv to Jerusalem, recognizing the city as Israel's capital.\n\n**Impact**: Cemented the U.S.-Israel alliance under the Netanyahu government and pleased the Evangelical base, while severing diplomatic ties with the Palestinian leadership.",
+      "tags": [
+        "breaking-norms"
+      ],
+      "primaryTag": "breaking-norms"
+    },
+    {
+      "title": "Singapore Summit (Trump-Kim Meeting)",
+      "startDate": "2018-06-12",
+      "description": "Historic first meeting between a sitting U.S. President and North Korean leader Kim Jong Un.\n\n**Impact**: Legitimized the Kim regime on the global stage. Trump unilaterally suspended military exercises with South Korea, marking a shift toward personalistic diplomacy over alliance management.",
+      "tags": [
+        "breaking-norms"
+      ],
+      "primaryTag": "breaking-norms"
+    },
+    {
+      "title": "Release of the Redacted Mueller Report",
+      "startDate": "2019-04-18",
+      "description": "The DOJ releases the Special Counsel's report on Russian interference. It finds no criminal conspiracy but outlines episodes of obstruction.\n\n**Impact**: The administration's successful 'spin' of the report as exoneration demonstrated its mastery of media narratives and the politicization of the Justice Department.",
+      "tags": [
+        "constitutional-concerns",
+        "breaking-norms"
+      ],
+      "primaryTag": "constitutional-concerns"
+    },
+    {
+      "title": "First Impeachment of Donald Trump",
+      "startDate": "2019-12-18",
+      "description": "The House votes to impeach the President for Abuse of Power regarding the withholding of Ukraine aid.\n\n**Impact**: Formalized the partisan rupture in Washington. The subsequent acquittal emboldened the President's view of unlimited executive authority in foreign affairs.",
+      "tags": [
+        "constitutional-concerns"
+      ],
+      "primaryTag": "constitutional-concerns"
+    },
+    {
+      "title": "Drone Strike Killing Qasem Soleimani",
+      "startDate": "2020-01-03",
+      "description": "A U.S. targeted strike kills the Iranian Quds Force commander in Baghdad.\n\n**Impact**: Demonstrated a high risk tolerance for military escalation. Brought the U.S. and Iran to the brink of open war, redefining the rules of engagement in the Middle East proxy conflict.",
+      "tags": [
+        "breaking-norms",
+        "policy-harm"
+      ],
+      "primaryTag": "breaking-norms"
+    },
+    {
+      "title": "COVID-19 National Emergency Declaration",
+      "startDate": "2020-03-13",
+      "description": "President Trump declares a National Emergency under the Stafford Act, unlocking federal funds for the pandemic response.\n\n**Impact**: Marked the administration's forced pivot from denial to crisis management. Initiated a period of massive federal spending and conflict with state governors over lockdowns.",
+      "tags": [
+        "policy-harm"
+      ],
+      "primaryTag": "policy-harm"
+    },
+    {
+      "title": "Lafayette Square Clearing / Bible Photo Op",
+      "startDate": "2020-06-01",
+      "description": "Federal forces forcibly clear peaceful protesters from Lafayette Square to allow the President to visit St. John's Church.\n\n**Impact**: Symbolized the administration's 'Law and Order' response to civil unrest. Sparked a rift with military leadership over the politicization of the armed forces.",
+      "tags": [
+        "constitutional-concerns",
+        "policy-harm"
+      ],
+      "primaryTag": "constitutional-concerns"
+    },
+    {
+      "title": "Second Impeachment of Donald Trump",
+      "startDate": "2021-01-13",
+      "description": "The House impeaches the President for 'Incitement of Insurrection' following the January 6 Capitol attack.\n\n**Impact**: Made Trump the first president in history to be impeached twice. Solidified his temporary isolation but set the stage for his 'revenge' narrative in the 2024 campaign.",
+      "tags": [
+        "constitutional-concerns"
+      ],
+      "primaryTag": "constitutional-concerns"
+    },
+    {
+      "title": "Launch of Department of Government Efficiency (DOGE)",
+      "startDate": "2025-01-20",
+      "description": "On his first day back in office, President Trump launches DOGE to dismantle federal bureaucracy, overseen by Elon Musk.\n\n**Impact**: Operationalized the 'deconstruction of the administrative state.' Facilitated mass firings of civil servants via Schedule F, politicizing the federal workforce.",
+      "tags": [
+        "breaking-norms",
+        "policy-harm"
+      ],
+      "primaryTag": "breaking-norms"
+    },
+    {
+      "title": "EO 14151: Ending DEI Programs",
+      "startDate": "2025-01-20",
+      "description": "An Executive Order banning Diversity, Equity, and Inclusion programs across the federal government and contractors.\n\n**Impact**: Marked the aggressive use of federal power to fight the 'Culture War.' Forced widespread institutional changes in federal agencies and private contractors dependent on federal funds.",
+      "tags": [
+        "breaking-norms",
+        "policy-harm"
+      ],
+      "primaryTag": "breaking-norms"
+    },
+    {
+      "title": "Announcement of 'Liberation Day' Universal Tariffs",
+      "startDate": "2025-04-02",
+      "description": "The administration announces a universal 10% baseline tariff on all imports and a system of reciprocal tariffs.\n\n**Impact**: Represented a shift to full autarky and protectionism. Disrupted global markets and forced a renegotiation of all U.S. trade relationships.",
+      "tags": [
+        "breaking-norms",
+        "policy-harm"
+      ],
+      "primaryTag": "breaking-norms"
+    },
+    {
+      "title": "Proclamation 10948 (Harvard University)",
+      "startDate": "2025-06-04",
+      "description": "A proclamation addressing 'national security risks' at Harvard University.\n\n**Impact**: Signaled the administration's intent to target elite higher education institutions as political adversaries, utilizing national security as the legal mechanism.",
+      "tags": [
+        "breaking-norms",
+        "constitutional-concerns"
+      ],
+      "primaryTag": "breaking-norms"
+    },
+    {
+      "title": "U.S.-China Trade Deal (Busan Agreement)",
+      "startDate": "2025-11-01",
+      "description": "A trade agreement reached in Busan where China agrees to halt fentanyl precursors in exchange for U.S. tariff relief.\n\n**Impact**: Demonstrated the administration's strategy of linking trade wars to domestic social crises (opioids). Provided a temporary de-escalation of the 2025 trade conflict.",
+      "tags": [
+        "policy-harm"
+      ],
+      "primaryTag": "policy-harm"
+    },
+    {
+      "title": "Proposal to Rescind 'Public Charge' Rule",
+      "startDate": "2025-11-17",
+      "description": "DHS proposes a new rule to deny green cards to immigrants who might use any public benefits.\n\n**Impact**: Reinstated the wealth test for legal immigration, shifting the demographic profile of eligible immigrants away from the working poor.",
+      "tags": [
+        "constitutional-concerns",
+        "policy-harm"
+      ],
+      "primaryTag": "constitutional-concerns"
+    },
+    {
+      "title": "Peace Plan Discussion with UK PM",
+      "startDate": "2025-11-23",
+      "description": "President Trump discusses a U.S. peace plan for Ukraine with UK Prime Minister Starmer, referencing Geneva talks.\n\n**Impact**: Indicates the administration's active push for a negotiated settlement in Ukraine, likely involving concessions, consistent with an 'America First' retreat from foreign entanglements.",
+      "tags": [
+        "breaking-norms"
+      ],
+      "primaryTag": "breaking-norms"
+    }
+  ]
+}

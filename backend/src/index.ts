@@ -24,10 +24,44 @@ const fastify = Fastify({
 })
 
 async function main() {
-  // Register CORS
+  // Register CORS - Allow extension and local network access
   await fastify.register(cors, {
-    origin: process.env.CORS_ORIGIN || 'http://localhost:5173',
+    origin: (origin, callback) => {
+      // Allow requests with no origin (like mobile apps, curl, etc)
+      if (!origin) {
+        callback(null, true)
+        return
+      }
+
+      // Allow chrome-extension:// origins (for browser extension)
+      if (origin.startsWith('chrome-extension://')) {
+        callback(null, true)
+        return
+      }
+
+      // Allow localhost in any form
+      if (origin.includes('localhost') || origin.includes('127.0.0.1')) {
+        callback(null, true)
+        return
+      }
+
+      // Allow local network (192.168.x.x and 10.x.x.x)
+      if (origin.match(/^https?:\/\/(192\.168\.|10\.)/)) {
+        callback(null, true)
+        return
+      }
+
+      // Allow specific CORS_ORIGIN if set
+      if (process.env.CORS_ORIGIN && origin === process.env.CORS_ORIGIN) {
+        callback(null, true)
+        return
+      }
+
+      // Reject all other origins
+      callback(new Error('Not allowed by CORS'), false)
+    },
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
+    credentials: true,
   })
 
   // Register Swagger
