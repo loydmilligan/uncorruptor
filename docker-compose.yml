@@ -1,0 +1,56 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: accountability-db
+    environment:
+      POSTGRES_USER: accountability
+      POSTGRES_PASSWORD: accountability_dev
+      POSTGRES_DB: accountability_tracker
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U accountability -d accountability_tracker"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: accountability-backend
+    environment:
+      DATABASE_URL: postgresql://accountability:accountability_dev@postgres:5432/accountability_tracker
+      PORT: 3000
+      HOST: 0.0.0.0
+      CORS_ORIGIN: http://localhost:5173
+      NODE_ENV: development
+    ports:
+      - "3000:3000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      - ./backend/src:/app/src:ro
+    command: sh -c "npx prisma migrate deploy && npx prisma db seed && npm run dev"
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: accountability-frontend
+    environment:
+      VITE_API_URL: http://localhost:3000/api
+    ports:
+      - "5173:5173"
+    depends_on:
+      - backend
+    volumes:
+      - ./frontend/src:/app/src:ro
+
+volumes:
+  postgres_data:
