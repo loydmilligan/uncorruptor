@@ -44,28 +44,28 @@
 
 ### Database & Backend Core
 
-- [ ] T009 Install Prisma and configure in `backend/prisma/schema.prisma` with PostgreSQL datasource
-- [ ] T010 Define complete Prisma schema with all entities (Event, Tag, EventTag, Source, Publication, CounterNarrative) in `backend/prisma/schema.prisma`
-- [ ] T011 Create database seed file with default tags and sample publications in `backend/prisma/seed.ts`
-- [ ] T012 Generate Prisma client and run initial migration
+- [x] T009 Install Prisma and configure in `backend/prisma/schema.prisma` with PostgreSQL datasource
+- [x] T010 Define complete Prisma schema with all entities (Event, Tag, EventTag, Source, Publication, CounterNarrative) in `backend/prisma/schema.prisma`
+- [x] T011 Create database seed file with default tags and sample publications in `backend/prisma/seed.ts`
+- [x] T012 Generate Prisma client and run initial migration
 
 ### Backend API Framework
 
-- [ ] T013 Install Fastify with TypeScript support in `backend/`
-- [ ] T014 [P] Create Fastify server entry point with CORS config in `backend/src/index.ts`
-- [ ] T015 [P] Create error handling middleware in `backend/src/lib/errors.ts`
-- [ ] T016 [P] Create response formatting utilities in `backend/src/lib/response.ts`
-- [ ] T017 [P] Create date/admin-period calculation utility in `backend/src/lib/adminPeriod.ts`
-- [ ] T018 [P] Configure Swagger/OpenAPI documentation plugin in `backend/src/plugins/swagger.ts`
+- [x] T013 Install Fastify with TypeScript support in `backend/`
+- [x] T014 [P] Create Fastify server entry point with CORS config in `backend/src/index.ts`
+- [x] T015 [P] Create error handling middleware in `backend/src/lib/errors.ts`
+- [x] T016 [P] Create response formatting utilities in `backend/src/lib/response.ts`
+- [x] T017 [P] Create date/admin-period calculation utility in `backend/src/lib/adminPeriod.ts`
+- [x] T018 [P] Configure Swagger/OpenAPI documentation plugin in `backend/src/plugins/swagger.ts`
 
 ### Frontend Core
 
-- [ ] T019 Install React dependencies (React Query, React Router, TailwindCSS) in `frontend/`
-- [ ] T020 [P] Configure TailwindCSS in `frontend/tailwind.config.js` and `frontend/src/index.css`
-- [ ] T021 [P] Setup React Router with basic routes in `frontend/src/App.tsx`
-- [ ] T022 [P] Create API client base configuration in `frontend/src/services/api.ts`
-- [ ] T023 [P] Create base layout component in `frontend/src/components/Layout.tsx`
-- [ ] T024 Install and configure shadcn/ui components in `frontend/`
+- [x] T019 Install React dependencies (React Query, React Router, TailwindCSS) in `frontend/`
+- [x] T020 [P] Configure TailwindCSS in `frontend/tailwind.config.js` and `frontend/src/index.css`
+- [x] T021 [P] Setup React Router with basic routes in `frontend/src/App.tsx`
+- [x] T022 [P] Create API client base configuration in `frontend/src/services/api.ts`
+- [x] T023 [P] Create base layout component in `frontend/src/components/Layout.tsx`
+- [x] T024 Install and configure shadcn/ui components in `frontend/`
 
 **Checkpoint**: Foundation ready - user story implementation can now begin
 

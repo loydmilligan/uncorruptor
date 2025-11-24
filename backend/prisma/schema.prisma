@@ -1,0 +1,110 @@
+// schema.prisma
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["fullTextSearch"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum AdminPeriod {
+  TRUMP_1
+  TRUMP_2
+  OTHER
+}
+
+enum StrengthRating {
+  weak
+  moderate
+  strong
+}
+
+model Event {
+  id          String      @id @default(uuid())
+  title       String      @db.VarChar(500)
+  description String?     @db.Text
+  eventDate   DateTime    @map("event_date") @db.Date
+  adminPeriod AdminPeriod @map("admin_period")
+  createdAt   DateTime    @default(now()) @map("created_at")
+  updatedAt   DateTime    @updatedAt @map("updated_at")
+
+  tags             EventTag[]
+  sources          Source[]
+  counterNarrative CounterNarrative?
+
+  @@index([eventDate])
+  @@index([adminPeriod])
+  @@map("events")
+}
+
+model Tag {
+  id          String   @id @default(uuid())
+  name        String   @unique @db.VarChar(100)
+  description String?  @db.VarChar(500)
+  color       String   @default("#6B7280") @db.VarChar(7)
+  isDefault   Boolean  @default(false) @map("is_default")
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  events EventTag[]
+
+  @@map("tags")
+}
+
+model EventTag {
+  eventId String @map("event_id")
+  tagId   String @map("tag_id")
+
+  event Event @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  tag   Tag   @relation(fields: [tagId], references: [id], onDelete: Cascade)
+
+  @@id([eventId, tagId])
+  @@map("event_tags")
+}
+
+model Source {
+  id            String   @id @default(uuid())
+  eventId       String   @map("event_id")
+  publicationId String?  @map("publication_id")
+  url           String   @db.VarChar(2048)
+  articleTitle  String?  @map("article_title") @db.VarChar(500)
+  biasRating    Int      @map("bias_rating") @db.SmallInt
+  dateAccessed  DateTime @default(now()) @map("date_accessed") @db.Date
+  isArchived    Boolean  @default(false) @map("is_archived")
+  createdAt     DateTime @default(now()) @map("created_at")
+
+  event       Event        @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  publication Publication? @relation(fields: [publicationId], references: [id])
+
+  @@index([eventId])
+  @@map("sources")
+}
+
+model Publication {
+  id          String  @id @default(uuid())
+  name        String  @unique @db.VarChar(200)
+  domain      String  @unique @db.VarChar(253)
+  defaultBias Int     @map("default_bias") @db.SmallInt
+  credibility String? @db.VarChar(20)
+
+  sources Source[]
+
+  @@map("publications")
+}
+
+model CounterNarrative {
+  id              String         @id @default(uuid())
+  eventId         String         @unique @map("event_id")
+  narrativeText   String         @map("narrative_text") @db.Text
+  adminStrength   StrengthRating @map("admin_strength")
+  concernStrength StrengthRating @map("concern_strength")
+  sourceRefs      String?        @map("source_refs") @db.Text
+  createdAt       DateTime       @default(now()) @map("created_at")
+  updatedAt       DateTime       @updatedAt @map("updated_at")
+
+  event Event @relation(fields: [eventId], references: [id], onDelete: Cascade)
+
+  @@map("counter_narratives")
+}
