@@ -6,11 +6,13 @@ import { TagBadge } from '@/components/TagBadge'
 import { Button } from '@/components/ui/button'
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
 import { formatDate, getAdminPeriodLabel } from '@/lib/utils'
+import { downloadMarkdown, copyMarkdownToClipboard } from '@/lib/exportMarkdown'
 
 export function EventDetailPage() {
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
   const [isEditing, setIsEditing] = useState(false)
+  const [copyStatus, setCopyStatus] = useState<'idle' | 'copied' | 'failed'>('idle')
 
   const { data, isLoading, error } = useEvent(id)
   const updateEvent = useUpdateEvent()
@@ -44,6 +46,18 @@ export function EventDetailPage() {
     } catch (err) {
       console.error('Failed to delete event:', err)
     }
+  }
+
+  const handleCopyMarkdown = async () => {
+    if (!event) return
+    const success = await copyMarkdownToClipboard(event)
+    setCopyStatus(success ? 'copied' : 'failed')
+    setTimeout(() => setCopyStatus('idle'), 2000)
+  }
+
+  const handleDownloadMarkdown = () => {
+    if (!event) return
+    downloadMarkdown(event)
   }
 
   if (isLoading) {
@@ -117,6 +131,12 @@ export function EventDetailPage() {
           </div>
         </div>
         <div className="flex gap-2">
+          <Button variant="outline" size="sm" onClick={handleDownloadMarkdown}>
+            Download MD
+          </Button>
+          <Button variant="outline" size="sm" onClick={handleCopyMarkdown}>
+            {copyStatus === 'copied' ? 'Copied!' : copyStatus === 'failed' ? 'Failed' : 'Copy MD'}
+          </Button>
           <Button variant="outline" onClick={() => setIsEditing(true)}>
             Edit
           </Button>
