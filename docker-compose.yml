@@ -25,7 +25,7 @@ services:
       DATABASE_URL: postgresql://accountability:accountability_dev@postgres:5432/accountability_tracker
       PORT: 3000
       HOST: 0.0.0.0
-      CORS_ORIGIN: http://localhost:5173
+      CORS_ORIGIN: http://192.168.5.255:5173
       NODE_ENV: development
     ports:
       - "3001:3000"
@@ -42,7 +42,7 @@ services:
       dockerfile: Dockerfile
     container_name: accountability-frontend
     environment:
-      VITE_API_URL: http://localhost:3001/api
+      VITE_API_URL: http://192.168.5.255:3001/api
     ports:
       - "5173:5173"
     depends_on:
