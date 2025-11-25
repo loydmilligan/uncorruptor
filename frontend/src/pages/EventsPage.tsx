@@ -4,6 +4,8 @@ import { useTags } from '@/hooks/useTags'
 import { EventCard } from '@/components/EventCard'
 import { FilterPanel, type FilterPanelFilters } from '@/components/FilterPanel'
 import { Button } from '@/components/ui/button'
+import { EmptyEventsState, EmptySearchState } from '@/components/EmptyState'
+import { ErrorState } from '@/components/ErrorBoundary'
 
 export function EventsPage() {
   const [searchParams, setSearchParams] = useSearchParams()
@@ -73,12 +75,12 @@ export function EventsPage() {
     selectedTags.length > 0 ||
     filters.adminPeriod
 
+  const handleClearFilters = () => {
+    setSearchParams(new URLSearchParams())
+  }
+
   if (error) {
-    return (
-      <div className="p-6">
-        <div className="text-destructive">Error loading events: {error.message}</div>
-      </div>
-    )
+    return <ErrorState message={`Error loading events: ${error.message}`} />
   }
 
   return (
@@ -111,14 +113,11 @@ export function EventsPage() {
           ))}
         </div>
       ) : events.length === 0 ? (
-        <div className="text-center py-12">
-          <p className="text-muted-foreground mb-4">
-            {hasFilters ? 'No events match your filters' : 'No events yet'}
-          </p>
-          <Link to="/events/new">
-            <Button>Create your first event</Button>
-          </Link>
-        </div>
+        hasFilters ? (
+          <EmptySearchState onClear={handleClearFilters} />
+        ) : (
+          <EmptyEventsState onCreate={() => window.location.href = '/events/new'} />
+        )
       ) : (
         <>
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">

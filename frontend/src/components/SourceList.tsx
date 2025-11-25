@@ -4,6 +4,7 @@ import { SourceForm } from './SourceForm'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { useCreateSource, useUpdateSource, useDeleteSource } from '@/hooks/useSources'
+import { EmptySourcesState } from './EmptyState'
 import type { Source } from '@/services/api'
 
 interface SourceListProps {
@@ -141,9 +142,7 @@ export function SourceList({ eventId, sources, isLoading }: SourceListProps) {
           ))}
         </div>
       ) : !isAddingSource ? (
-        <p className="text-muted-foreground text-sm py-4 text-center">
-          No sources added yet
-        </p>
+        <EmptySourcesState />
       ) : null}
 
       {/* Add source form */}

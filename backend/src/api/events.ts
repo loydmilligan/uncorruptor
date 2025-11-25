@@ -26,6 +26,26 @@ export async function eventRoutes(fastify: FastifyInstance) {
     }
   })
 
+  // GET /api/events/check-duplicates - Check for potential duplicates
+  fastify.get('/check-duplicates', async (
+    request: FastifyRequest<{ Querystring: { title: string; startDate: string } }>,
+    reply: FastifyReply
+  ) => {
+    try {
+      const { title, startDate } = request.query
+      if (!title || !startDate) {
+        throw new ValidationError('Missing required parameters', {
+          title: title ? undefined : ['Title is required'],
+          startDate: startDate ? undefined : ['Start date is required'],
+        })
+      }
+      const duplicates = await eventService.checkDuplicates(title, startDate)
+      sendSuccess(reply, duplicates)
+    } catch (error) {
+      handleError(error, reply)
+    }
+  })
+
   // GET /api/events/:id - Get single event with details
   fastify.get('/:id', async (request: FastifyRequest<{ Params: { id: string } }>, reply: FastifyReply) => {
     try {

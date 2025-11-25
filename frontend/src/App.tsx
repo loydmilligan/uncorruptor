@@ -6,6 +6,8 @@ import { EventDetailPage } from './pages/EventDetailPage'
 import { CreateEventPage } from './pages/CreateEventPage'
 import { BulkUploadPage } from './pages/BulkUploadPage'
 import DashboardPage from './pages/DashboardPage'
+import { ErrorBoundary } from './components/ErrorBoundary'
+import { useKeyboardShortcuts } from './hooks/useKeyboardShortcuts'
 
 function NotFoundPage() {
   return (
@@ -28,23 +30,33 @@ const queryClient = new QueryClient({
   },
 })
 
+function AppContent() {
+  useKeyboardShortcuts()
+
+  return (
+    <Routes>
+      <Route element={<Layout />}>
+        <Route path="/" element={<Navigate to="/events" replace />} />
+        <Route path="/events" element={<EventsPage />} />
+        <Route path="/events/new" element={<CreateEventPage />} />
+        <Route path="/events/bulk-upload" element={<BulkUploadPage />} />
+        <Route path="/events/:id" element={<EventDetailPage />} />
+        <Route path="/dashboard" element={<DashboardPage />} />
+        <Route path="*" element={<NotFoundPage />} />
+      </Route>
+    </Routes>
+  )
+}
+
 export function App() {
   return (
-    <QueryClientProvider client={queryClient}>
-      <BrowserRouter>
-        <Routes>
-          <Route element={<Layout />}>
-            <Route path="/" element={<Navigate to="/events" replace />} />
-            <Route path="/events" element={<EventsPage />} />
-            <Route path="/events/new" element={<CreateEventPage />} />
-            <Route path="/events/bulk-upload" element={<BulkUploadPage />} />
-            <Route path="/events/:id" element={<EventDetailPage />} />
-            <Route path="/dashboard" element={<DashboardPage />} />
-            <Route path="*" element={<NotFoundPage />} />
-          </Route>
-        </Routes>
-      </BrowserRouter>
-    </QueryClientProvider>
+    <ErrorBoundary>
+      <QueryClientProvider client={queryClient}>
+        <BrowserRouter>
+          <AppContent />
+        </BrowserRouter>
+      </QueryClientProvider>
+    </ErrorBoundary>
   )
 }
 

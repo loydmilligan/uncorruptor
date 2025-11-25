@@ -193,6 +193,31 @@ export const eventService = {
     return transformEventDetail(event)
   },
 
+  async checkDuplicates(title: string, startDate: string) {
+    // Check for events with similar title and date
+    const similarEvents = await prisma.event.findMany({
+      where: {
+        title: { contains: title, mode: 'insensitive' },
+        startDate: {
+          gte: new Date(new Date(startDate).getTime() - 7 * 24 * 60 * 60 * 1000), // 7 days before
+          lte: new Date(new Date(startDate).getTime() + 7 * 24 * 60 * 60 * 1000), // 7 days after
+        },
+      },
+      select: {
+        id: true,
+        title: true,
+        startDate: true,
+      },
+      take: 5,
+    })
+
+    return similarEvents.map((e) => ({
+      id: e.id,
+      title: e.title,
+      startDate: e.startDate.toISOString().split('T')[0],
+    }))
+  },
+
   async create(input: CreateEventInput) {
     const startDate = new Date(input.startDate)
     const endDate = input.endDate ? new Date(input.endDate) : null

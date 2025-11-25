@@ -14,17 +14,19 @@ import { StatCard } from '../components/charts/StatCard'
 import { EventsByTagChart } from '../components/charts/EventsByTagChart'
 import { TimelineChart } from '../components/charts/TimelineChart'
 import { AdminComparisonChart } from '../components/charts/AdminComparisonChart'
+import { ErrorState } from '../components/ErrorBoundary'
 import { FileText, ExternalLink, MessageSquare, Tag } from 'lucide-react'
 
 export default function DashboardPage() {
   const navigate = useNavigate()
 
-  const { data: summary, isLoading: summaryLoading } = useDashboardSummary()
-  const { data: eventsByTag, isLoading: tagLoading } = useEventsByTag()
-  const { data: timeline, isLoading: timelineLoading } = useTimeline()
-  const { data: comparison, isLoading: comparisonLoading } = useAdminComparison()
+  const { data: summary, isLoading: summaryLoading, error: summaryError } = useDashboardSummary()
+  const { data: eventsByTag, isLoading: tagLoading, error: tagError } = useEventsByTag()
+  const { data: timeline, isLoading: timelineLoading, error: timelineError } = useTimeline()
+  const { data: comparison, isLoading: comparisonLoading, error: comparisonError } = useAdminComparison()
 
   const isLoading = summaryLoading || tagLoading || timelineLoading || comparisonLoading
+  const hasError = summaryError || tagError || timelineError || comparisonError
 
   // Drill-down handlers
   const handleTagClick = (tagId: string, tagName: string) => {
@@ -57,6 +59,11 @@ export default function DashboardPage() {
 
   const handleEventsWithNarrativesClick = () => {
     navigate('/events?hasCounterNarrative=true')
+  }
+
+  if (hasError) {
+    const errorMessage = (summaryError || tagError || timelineError || comparisonError)?.message || 'Unknown error'
+    return <ErrorState message={`Error loading dashboard: ${errorMessage}`} />
   }
 
   if (isLoading) {

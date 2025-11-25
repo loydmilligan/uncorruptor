@@ -4,6 +4,8 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { TagSelector } from './TagSelector'
+import { DuplicateWarning } from './DuplicateWarning'
+import { useDuplicateCheck } from '@/hooks/useDuplicateCheck'
 import type { Event } from '@/services/api'
 
 interface EventFormData {
@@ -32,6 +34,10 @@ export function EventForm({ event, onSubmit, onCancel, isSubmitting }: EventForm
     event?.tags?.find((t) => t.isPrimary)?.id
   )
   const [errors, setErrors] = useState<Record<string, string>>({})
+
+  // Check for duplicates only when creating a new event (no existing event ID)
+  const shouldCheckDuplicates = !event?.id && title.length > 3 && startDate.length > 0
+  const { data: duplicates } = useDuplicateCheck(title, startDate, shouldCheckDuplicates)
 
   useEffect(() => {
     if (event) {
@@ -150,6 +156,11 @@ export function EventForm({ event, onSubmit, onCancel, isSubmitting }: EventForm
           rows={4}
         />
       </div>
+
+      {/* Duplicate Warning */}
+      {duplicates && duplicates.length > 0 && (
+        <DuplicateWarning duplicates={duplicates} />
+      )}
 
       <div className="space-y-2">
         <Label>Tags</Label>

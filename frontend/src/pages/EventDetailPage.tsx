@@ -13,6 +13,7 @@ import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
 import { formatDateRange, getAdminPeriodLabel } from '@/lib/utils'
 import { downloadMarkdown, copyMarkdownToClipboard } from '@/lib/exportMarkdown'
 import { cn } from '@/lib/utils'
+import { ErrorState } from '@/components/ErrorBoundary'
 
 type ViewMode = 'default' | 'analysis'
 
@@ -111,25 +112,11 @@ export function EventDetailPage() {
   }
 
   if (error) {
-    return (
-      <div className="text-center py-12">
-        <p className="text-destructive mb-4">Error loading event: {error.message}</p>
-        <Link to="/events">
-          <Button variant="outline">Back to Events</Button>
-        </Link>
-      </div>
-    )
+    return <ErrorState message={`Error loading event: ${error.message}`} />
   }
 
   if (!event) {
-    return (
-      <div className="text-center py-12">
-        <p className="text-muted-foreground mb-4">Event not found</p>
-        <Link to="/events">
-          <Button variant="outline">Back to Events</Button>
-        </Link>
-      </div>
-    )
+    return <ErrorState title="Event not found" message="The event you're looking for doesn't exist." />
   }
 
   if (isEditing) {
