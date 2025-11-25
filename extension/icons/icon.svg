@@ -1,0 +1,16 @@
+<svg width="128" height="128" viewBox="0 0 128 128" xmlns="http://www.w3.org/2000/svg">
+  <!-- Rounded white background -->
+  <rect x="0" y="0" width="128" height="128" rx="20" ry="20" fill="white"/>
+
+  <!-- Magnifying glass -->
+  <g id="magnifying-glass">
+    <!-- Lens rim -->
+    <circle cx="52" cy="48" r="32" fill="none" stroke="#1a477c" stroke-width="7"/>
+
+    <!-- Handle pointing to bottom-right (45 degrees) -->
+    <line x1="74" y1="70" x2="102" y2="98" stroke="#1a477c" stroke-width="10" stroke-linecap="round"/>
+
+    <!-- Letter U in the center -->
+    <text x="52" y="63" font-family="Arial, sans-serif" font-size="48" font-weight="bold" fill="#1a477c" text-anchor="middle">U</text>
+  </g>
+</svg>
