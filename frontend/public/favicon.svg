@@ -4,13 +4,13 @@
 
   <!-- Magnifying glass -->
   <g id="magnifying-glass">
-    <!-- Lens rim -->
-    <circle cx="52" cy="48" r="32" fill="none" stroke="#1a477c" stroke-width="7"/>
+    <!-- Lens rim - larger circle -->
+    <circle cx="58" cy="54" r="38" fill="none" stroke="#1a477c" stroke-width="8"/>
 
-    <!-- Handle pointing to bottom-right (45 degrees) -->
-    <line x1="74" y1="70" x2="102" y2="98" stroke="#1a477c" stroke-width="10" stroke-linecap="round"/>
+    <!-- Handle pointing to bottom-right (45 degrees) - shorter -->
+    <line x1="84" y1="80" x2="106" y2="102" stroke="#1a477c" stroke-width="11" stroke-linecap="round"/>
 
-    <!-- Letter U in the center -->
-    <text x="52" y="63" font-family="Arial, sans-serif" font-size="48" font-weight="bold" fill="#1a477c" text-anchor="middle">U</text>
+    <!-- Letter U in the center - larger -->
+    <text x="58" y="72" font-family="Arial, sans-serif" font-size="56" font-weight="bold" fill="#1a477c" text-anchor="middle">U</text>
   </g>
 </svg>
