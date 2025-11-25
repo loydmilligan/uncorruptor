@@ -22,6 +22,13 @@ function copyStaticAssets() {
         renameSync(popupHtmlSrc, popupHtmlDest)
       }
 
+      // Move options.html to root of dist
+      const optionsHtmlSrc = resolve(distDir, 'src/options/options.html')
+      const optionsHtmlDest = resolve(distDir, 'options.html')
+      if (existsSync(optionsHtmlSrc)) {
+        renameSync(optionsHtmlSrc, optionsHtmlDest)
+      }
+
       // Copy manifest.json
       copyFileSync(
         resolve(__dirname, 'manifest.json'),
@@ -59,6 +66,7 @@ export default defineConfig({
     rollupOptions: {
       input: {
         popup: resolve(__dirname, 'src/popup/popup.html'),
+        options: resolve(__dirname, 'src/options/options.html'),
         'service-worker': resolve(__dirname, 'src/background/serviceWorker.ts'),
         'content-script': resolve(__dirname, 'src/content/extractPageData.ts'),
       },
