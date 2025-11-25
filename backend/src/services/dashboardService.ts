@@ -192,8 +192,12 @@ export class DashboardService {
         },
         include: {
           tags: {
-            select: {
-              name: true,
+            include: {
+              tag: {
+                select: {
+                  name: true,
+                },
+              },
             },
           },
         },
@@ -207,8 +211,12 @@ export class DashboardService {
         },
         include: {
           tags: {
-            select: {
-              name: true,
+            include: {
+              tag: {
+                select: {
+                  name: true,
+                },
+              },
             },
           },
         },
@@ -219,8 +227,8 @@ export class DashboardService {
     const buildCategoryCounts = (events: typeof admin1Events) => {
       const counts: { [key: string]: number } = {}
       events.forEach((event) => {
-        event.tags.forEach((tag) => {
-          counts[tag.name] = (counts[tag.name] || 0) + 1
+        event.tags.forEach((eventTag) => {
+          counts[eventTag.tag.name] = (counts[eventTag.tag.name] || 0) + 1
         })
       })
       return counts

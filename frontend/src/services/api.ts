@@ -167,8 +167,11 @@ export interface Event {
   createdAt: string
   updatedAt: string
   tags: TagWithPrimary[]
-  sources: Source[]
-  counterNarrative: CounterNarrative | null
+  sources?: Source[]
+  counterNarrative?: CounterNarrative | null
+  _count?: {
+    sources: number
+  }
 }
 
 // API endpoint helpers

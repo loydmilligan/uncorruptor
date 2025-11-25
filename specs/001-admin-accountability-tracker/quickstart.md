@@ -83,6 +83,7 @@ pnpm dev  # Watches and rebuilds extension
 ### Access the Application
 
 - **Frontend**: http://localhost:5173
+- **Dashboard**: http://localhost:5173/dashboard
 - **API**: http://localhost:3000/api
 - **API Docs**: http://localhost:3000/documentation (Swagger UI)
 
@@ -146,14 +147,58 @@ pnpm test         # Run tests
 pnpm zip          # Create .zip for Chrome Web Store (if publishing)
 ```
 
+## User Guide
+
+### Key Features
+
+**Event Management**
+- Create, edit, and delete accountability events
+- Add tags and categorize events by topic
+- Attach sources with bias ratings
+- Add counter-narratives with strength assessments
+- Export events to Markdown format
+
+**Dashboard**
+- View summary statistics
+- Visualize events by category (pie chart)
+- See event timeline by month (bar chart)
+- Compare Trump administrations (grouped bar chart)
+- Click charts to drill down into filtered event lists
+
+**Search & Filtering**
+- Search events by title/description
+- Filter by tags, date range, or administration period
+- Paginated results
+
+**Chrome Extension**
+- Quick event creation from any webpage
+- Auto-fill URL and title from current tab
+- Access full event list
+- Connects to local or deployed API
+
+### Keyboard Shortcuts
+
+- `Cmd/Ctrl + N` - Create new event
+- `Cmd/Ctrl + H` - Go to events list
+- `Cmd/Ctrl + D` - Go to dashboard
+- `Cmd/Ctrl + K` - Focus search
+- `?` - Show keyboard shortcuts help
+- `Esc` - Clear/close search
+
 ## Verification Checklist
 
 After setup, verify each component works:
 
 - [ ] Backend starts without errors
 - [ ] `curl http://localhost:3000/api/tags` returns default tags
+- [ ] `curl http://localhost:3000/api/dashboard/summary` returns statistics
 - [ ] Frontend loads at http://localhost:5173
+- [ ] Dashboard loads at http://localhost:5173/dashboard with charts
 - [ ] Can create a new event through the UI
+- [ ] Duplicate detection warning appears for similar events
+- [ ] Empty states appear when lists are empty
+- [ ] Error boundaries catch and display errors gracefully
+- [ ] Keyboard shortcuts work (try Cmd+N, Cmd+D, Cmd+H)
 - [ ] Extension loads in Chrome without errors
 - [ ] Extension popup shows when clicking icon
 - [ ] Extension can connect to local API

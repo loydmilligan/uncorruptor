@@ -13,7 +13,7 @@ export async function dashboardRoutes(fastify: FastifyInstance) {
    * GET /api/dashboard/summary
    * Get summary statistics for dashboard
    */
-  fastify.get('/summary', async (request: FastifyRequest, reply: FastifyReply) => {
+  fastify.get('/summary', async (_request: FastifyRequest, reply: FastifyReply) => {
     try {
       const summary = await dashboardService.getSummary()
       sendSuccess(reply, summary)
@@ -27,7 +27,7 @@ export async function dashboardRoutes(fastify: FastifyInstance) {
    * GET /api/dashboard/events-by-tag
    * Get event distribution by tag
    */
-  fastify.get('/events-by-tag', async (request: FastifyRequest, reply: FastifyReply) => {
+  fastify.get('/events-by-tag', async (_request: FastifyRequest, reply: FastifyReply) => {
     try {
       const data = await dashboardService.getEventsByTag()
       sendSuccess(reply, data)
@@ -76,7 +76,7 @@ export async function dashboardRoutes(fastify: FastifyInstance) {
    * GET /api/dashboard/comparison
    * Compare events across Trump administrations
    */
-  fastify.get('/comparison', async (request: FastifyRequest, reply: FastifyReply) => {
+  fastify.get('/comparison', async (_request: FastifyRequest, reply: FastifyReply) => {
     try {
       const comparison = await dashboardService.getAdminComparison()
       sendSuccess(reply, comparison)

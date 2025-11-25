@@ -34,10 +34,10 @@ export async function eventRoutes(fastify: FastifyInstance) {
     try {
       const { title, startDate } = request.query
       if (!title || !startDate) {
-        throw new ValidationError('Missing required parameters', {
-          title: title ? undefined : ['Title is required'],
-          startDate: startDate ? undefined : ['Start date is required'],
-        })
+        const errors: Record<string, string[]> = {}
+        if (!title) errors.title = ['Title is required']
+        if (!startDate) errors.startDate = ['Start date is required']
+        throw new ValidationError('Missing required parameters', errors)
       }
       const duplicates = await eventService.checkDuplicates(title, startDate)
       sendSuccess(reply, duplicates)
@@ -103,31 +103,35 @@ export async function eventRoutes(fastify: FastifyInstance) {
   })
 
   // POST /api/events/bulk - Bulk import events
-  fastify.post('/bulk', async (request: FastifyRequest, reply: FastifyReply) => {
-    try {
-      const bulkData = bulkImportSchema.parse(request.body)
+  fastify.post<{ Querystring: { skipDuplicates?: string; createTags?: string } }>(
+    '/bulk',
+    async (request: FastifyRequest, reply: FastifyReply) => {
+      try {
+        const bulkData = bulkImportSchema.parse(request.body)
+        const query = request.query as { skipDuplicates?: string; createTags?: string }
 
-      // Get options from query params
-      const skipDuplicates = request.query?.['skipDuplicates'] !== 'false'
-      const createTags = request.query?.['createTags'] !== 'false'
+        // Get options from query params
+        const skipDuplicates = query.skipDuplicates !== 'false'
+        const createTags = query.createTags !== 'false'
 
-      const result = await bulkImportService.importEvents(bulkData, {
-        skipDuplicates,
-        createTags,
-      })
+        const result = await bulkImportService.importEvents(bulkData, {
+          skipDuplicates,
+          createTags,
+        })
 
-      sendSuccess(reply, result)
-    } catch (error) {
-      if (error instanceof ZodError) {
-        handleError(
-          new ValidationError('Invalid bulk import data', formatZodErrors(error)),
-          reply
-        )
-        return
+        sendSuccess(reply, result)
+      } catch (error) {
+        if (error instanceof ZodError) {
+          handleError(
+            new ValidationError('Invalid bulk import data', formatZodErrors(error)),
+            reply
+          )
+          return
+        }
+        handleError(error, reply)
       }
-      handleError(error, reply)
     }
-  })
+  )
 }
 
 // Helper to format Zod errors

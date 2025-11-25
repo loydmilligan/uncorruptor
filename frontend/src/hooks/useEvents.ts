@@ -30,7 +30,7 @@ export function useCreateEvent() {
   const queryClient = useQueryClient()
 
   return useMutation({
-    mutationFn: (data: { title: string; description?: string; eventDate: string; tagIds: string[] }) =>
+    mutationFn: (data: { title: string; description?: string; startDate: string; endDate?: string; tagIds: string[]; primaryTagId?: string }) =>
       eventsApi.create(data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['events'] })
@@ -42,7 +42,7 @@ export function useUpdateEvent() {
   const queryClient = useQueryClient()
 
   return useMutation({
-    mutationFn: ({ id, data }: { id: string; data: Partial<{ title: string; description?: string; eventDate: string; tagIds: string[] }> }) =>
+    mutationFn: ({ id, data }: { id: string; data: Partial<{ title: string; description?: string; startDate: string; endDate?: string; tagIds: string[]; primaryTagId?: string }> }) =>
       eventsApi.update(id, data),
     onSuccess: (_data, variables) => {
       queryClient.invalidateQueries({ queryKey: ['events'] })
