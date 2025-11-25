@@ -5,7 +5,8 @@
 
 import { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify'
 import { dashboardService } from '../services/dashboardService.js'
-import { sendSuccess, sendError } from '../lib/responses.js'
+import { sendSuccess } from '../lib/response.js'
+import { handleError, BadRequestError } from '../lib/errors.js'
 
 export async function dashboardRoutes(fastify: FastifyInstance) {
   /**
@@ -18,7 +19,7 @@ export async function dashboardRoutes(fastify: FastifyInstance) {
       sendSuccess(reply, summary)
     } catch (error: any) {
       fastify.log.error(error)
-      sendError(reply, 500, 'Failed to fetch dashboard summary', error.message)
+      handleError(error, reply)
     }
   })
 
@@ -32,7 +33,7 @@ export async function dashboardRoutes(fastify: FastifyInstance) {
       sendSuccess(reply, data)
     } catch (error: any) {
       fastify.log.error(error)
-      sendError(reply, 500, 'Failed to fetch events by tag', error.message)
+      handleError(error, reply)
     }
   })
 
@@ -57,19 +58,17 @@ export async function dashboardRoutes(fastify: FastifyInstance) {
 
       // Validate dates
       if (startDateObj && isNaN(startDateObj.getTime())) {
-        sendError(reply, 400, 'Invalid startDate format')
-        return
+        throw new BadRequestError('Invalid startDate format')
       }
       if (endDateObj && isNaN(endDateObj.getTime())) {
-        sendError(reply, 400, 'Invalid endDate format')
-        return
+        throw new BadRequestError('Invalid endDate format')
       }
 
       const timeline = await dashboardService.getTimeline(startDateObj, endDateObj)
       sendSuccess(reply, timeline)
     } catch (error: any) {
       fastify.log.error(error)
-      sendError(reply, 500, 'Failed to fetch timeline', error.message)
+      handleError(error, reply)
     }
   })
 
@@ -83,7 +82,7 @@ export async function dashboardRoutes(fastify: FastifyInstance) {
       sendSuccess(reply, comparison)
     } catch (error: any) {
       fastify.log.error(error)
-      sendError(reply, 500, 'Failed to fetch admin comparison', error.message)
+      handleError(error, reply)
     }
   })
 }
