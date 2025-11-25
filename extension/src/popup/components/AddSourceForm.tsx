@@ -12,7 +12,7 @@ export default function AddSourceForm({ pageData, onBack, onSuccess }: AddSource
   const [selectedEventId, setSelectedEventId] = useState<string>('')
   const [url, setUrl] = useState(pageData?.url || '')
   const [articleTitle, setArticleTitle] = useState(pageData?.title || '')
-  const [biasRating, setBiasRating] = useState(3)
+  const [biasRating, setBiasRating] = useState(0)
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
@@ -94,18 +94,19 @@ export default function AddSourceForm({ pageData, onBack, onSuccess }: AddSource
 
         <div className="form-group">
           <label htmlFor="biasRating">
-            Bias/Reliability Rating: {biasRating} / 5
+            Political Bias: {biasRating > 0 ? '+' : ''}{biasRating}
+            {biasRating < 0 ? ' (Left)' : biasRating > 0 ? ' (Right)' : ' (Neutral)'}
           </label>
           <input
             id="biasRating"
             type="range"
-            min="1"
-            max="5"
+            min="-3"
+            max="3"
             value={biasRating}
             onChange={(e) => setBiasRating(Number(e.target.value))}
           />
           <small>
-            1 = Highly Biased/Unreliable, 5 = Neutral/Highly Reliable
+            -3 = Far Left, 0 = Neutral/Balanced, +3 = Far Right
           </small>
         </div>
 
