@@ -5,16 +5,7 @@ import { EventsPage } from './pages/EventsPage'
 import { EventDetailPage } from './pages/EventDetailPage'
 import { CreateEventPage } from './pages/CreateEventPage'
 import { BulkUploadPage } from './pages/BulkUploadPage'
-
-// Placeholder page - will be implemented in Phase 8
-function DashboardPage() {
-  return (
-    <div className="p-6">
-      <h1 className="text-2xl font-bold mb-4">Dashboard</h1>
-      <p className="text-muted-foreground">Dashboard will be implemented in Phase 8 (US6)</p>
-    </div>
-  )
-}
+import DashboardPage from './pages/DashboardPage'
 
 function NotFoundPage() {
   return (

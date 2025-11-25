@@ -236,23 +236,23 @@
 
 ### Backend Implementation for US6
 
-- [ ] T105 [P] [US6] Create DashboardService for aggregations in `backend/src/services/dashboardService.ts`
-- [ ] T106 [US6] Create GET /api/dashboard/summary endpoint in `backend/src/api/dashboard.ts`
-- [ ] T107 [US6] Create GET /api/dashboard/timeline endpoint in `backend/src/api/dashboard.ts`
-- [ ] T108 [US6] Create GET /api/dashboard/comparison endpoint in `backend/src/api/dashboard.ts`
-- [ ] T109 [US6] Register dashboard routes in `backend/src/index.ts`
+- [X] T105 [P] [US6] Create DashboardService for aggregations in `backend/src/services/dashboardService.ts`
+- [X] T106 [US6] Create GET /api/dashboard/summary endpoint in `backend/src/api/dashboard.ts`
+- [X] T107 [US6] Create GET /api/dashboard/timeline endpoint in `backend/src/api/dashboard.ts`
+- [X] T108 [US6] Create GET /api/dashboard/comparison endpoint in `backend/src/api/dashboard.ts`
+- [X] T109 [US6] Register dashboard routes in `backend/src/index.ts`
 
 ### Frontend Implementation for US6
 
-- [ ] T110 Install Recharts in `frontend/`
-- [ ] T111 [P] [US6] Create useDashboard hook in `frontend/src/hooks/useDashboard.ts`
-- [ ] T112 [P] [US6] Create EventsByTagChart component in `frontend/src/components/charts/EventsByTagChart.tsx`
-- [ ] T113 [P] [US6] Create TimelineChart component in `frontend/src/components/charts/TimelineChart.tsx`
-- [ ] T114 [P] [US6] Create AdminComparisonChart component in `frontend/src/components/charts/AdminComparisonChart.tsx`
-- [ ] T115 [P] [US6] Create StatCard component for summary stats in `frontend/src/components/charts/StatCard.tsx`
-- [ ] T116 [US6] Create DashboardPage in `frontend/src/pages/DashboardPage.tsx`
-- [ ] T117 [US6] Add click-through from charts to filtered event list in `frontend/src/pages/DashboardPage.tsx`
-- [ ] T118 [US6] Add Dashboard route and navigation in `frontend/src/App.tsx`
+- [X] T110 Install Recharts in `frontend/`
+- [X] T111 [P] [US6] Create useDashboard hook in `frontend/src/hooks/useDashboard.ts`
+- [X] T112 [P] [US6] Create EventsByTagChart component in `frontend/src/components/charts/EventsByTagChart.tsx`
+- [X] T113 [P] [US6] Create TimelineChart component in `frontend/src/components/charts/TimelineChart.tsx`
+- [X] T114 [P] [US6] Create AdminComparisonChart component in `frontend/src/components/charts/AdminComparisonChart.tsx`
+- [X] T115 [P] [US6] Create StatCard component for summary stats in `frontend/src/components/charts/StatCard.tsx`
+- [X] T116 [US6] Create DashboardPage in `frontend/src/pages/DashboardPage.tsx`
+- [X] T117 [US6] Add click-through from charts to filtered event list in `frontend/src/pages/DashboardPage.tsx`
+- [X] T118 [US6] Add Dashboard route and navigation in `frontend/src/App.tsx`
 
 **Checkpoint**: Dashboard displays all visualizations with drill-down capability
 

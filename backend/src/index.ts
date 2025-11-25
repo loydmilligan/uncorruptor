@@ -6,6 +6,7 @@ import { tagRoutes } from './api/tags.js'
 import { sourceRoutes } from './api/sources.js'
 import { publicationRoutes } from './api/publications.js'
 import { counterNarrativeRoutes } from './api/counterNarrative.js'
+import { dashboardRoutes } from './api/dashboard.js'
 
 const fastify = Fastify({
   logger: {
@@ -78,8 +79,7 @@ async function main() {
   await fastify.register(sourceRoutes, { prefix: '/api/events' }) // Sources are nested under events
   await fastify.register(publicationRoutes, { prefix: '/api/publications' })
   await fastify.register(counterNarrativeRoutes, { prefix: '/api/events' }) // Counter-narratives are nested under events
-  // Future routes:
-  // await fastify.register(dashboardRoutes, { prefix: '/api/dashboard' })
+  await fastify.register(dashboardRoutes, { prefix: '/api/dashboard' })
 
   // Start server
   const port = parseInt(process.env.PORT || '3000', 10)
