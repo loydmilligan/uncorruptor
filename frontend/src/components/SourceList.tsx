@@ -107,8 +107,10 @@ export function SourceList({ eventId, counterNarrativeId, sources, isLoading, is
   }
 
   const handleExtractClaims = async (source: Source) => {
-    // Reset any previous state
-    reset()
+    // Close any currently open extractor and reset state
+    if (extractingSourceId) {
+      reset()
+    }
 
     setExtractingSourceId(source.id)
     try {
@@ -117,6 +119,7 @@ export function SourceList({ eventId, counterNarrativeId, sources, isLoading, is
       console.error('Failed to extract claims:', err)
       // Reset state on error
       setExtractingSourceId(null)
+      reset()
     }
   }
 

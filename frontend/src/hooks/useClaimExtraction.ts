@@ -35,18 +35,21 @@ export function useClaimExtraction(): UseClaimExtractionReturn {
     articleTitle?: string,
     includeDomainContext: boolean = true
   ) => {
-    // Cancel any existing request
-    if (abortControllerRef.current) {
+    // Cancel any existing request only if one is in flight
+    if (abortControllerRef.current && isLoading) {
       abortControllerRef.current.abort();
+      abortControllerRef.current = null;
     }
+
+    // Clean up any previous state
+    setError(null);
+    setResult(null);
 
     // Create new abort controller
     const controller = new AbortController();
     abortControllerRef.current = controller;
 
     setIsLoading(true);
-    setError(null);
-    setResult(null);
 
     try {
       // Get AI settings from SettingsStorage
@@ -111,7 +114,12 @@ export function useClaimExtraction(): UseClaimExtractionReturn {
   };
 
   const reset = () => {
-    cancel();
+    // Only cancel if there's actually a request in flight
+    if (isLoading && abortControllerRef.current) {
+      abortControllerRef.current.abort();
+    }
+    abortControllerRef.current = null;
+    setIsLoading(false);
     setResult(null);
     setError(null);
   };
