@@ -16,7 +16,8 @@ export function Layout() {
         <div className="container flex h-14 items-center">
           <div className="mr-4 flex">
             <Link to="/" className="mr-6 flex items-center space-x-2">
-              <span className="font-bold text-lg">Accountability Tracker</span>
+              <img src="/logo.png" alt="Uncorruptor" className="h-8 w-8" />
+              <span className="font-bold text-lg">Uncorruptor</span>
             </Link>
             <nav className="flex items-center space-x-6 text-sm font-medium">
               {navigation.map((item) => {
@@ -56,7 +57,7 @@ export function Layout() {
       <footer className="border-t py-6">
         <div className="container flex flex-col items-center justify-between gap-4 md:flex-row">
           <p className="text-center text-sm leading-loose text-muted-foreground md:text-left">
-            Administration Accountability Tracker - Personal use only
+            Uncorruptor - Accountability Tracker for Personal Use
           </p>
         </div>
       </footer>
