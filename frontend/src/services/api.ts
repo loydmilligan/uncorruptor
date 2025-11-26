@@ -252,3 +252,8 @@ export const dashboardApi = {
   comparison: () =>
     api.get<ApiResponse<{ trump1: Record<string, number>; trump2: Record<string, number> }>>('/dashboard/comparison'),
 }
+
+export const claimsApi = {
+  createBulk: (sourceId: string, claims: Array<{ claimText: string; category: string; confidenceScore: number }>) =>
+    api.post<ApiResponse<unknown>>('/claims/bulk', { sourceId, claims }),
+}

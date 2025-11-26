@@ -1,12 +1,16 @@
 import { useState } from 'react'
 import { BiasRatingBadge, BiasScale } from './BiasRatingBadge'
 import { SourceForm } from './SourceForm'
+import { ClaimExtractor } from './ai/ClaimExtractor'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { useCreateSource, useUpdateSource, useDeleteSource } from '@/hooks/useSources'
 import { useCreateCounterNarrativeSource, useUpdateCounterNarrativeSource, useDeleteCounterNarrativeSource } from '@/hooks/useCounterNarrativeSources'
+import { useClaimExtraction } from '@/hooks/useClaimExtraction'
+import { claimsApi } from '@/services/api'
 import { EmptySourcesState } from './EmptyState'
 import { cn } from '@/lib/utils'
+import { Sparkles } from 'lucide-react'
 import type { Source } from '@/services/api'
 
 interface SourceListProps {
@@ -20,6 +24,10 @@ interface SourceListProps {
 export function SourceList({ eventId, counterNarrativeId, sources, isLoading, isCounterNarrative = false }: SourceListProps) {
   const [isAddingSource, setIsAddingSource] = useState(false)
   const [editingSourceId, setEditingSourceId] = useState<string | null>(null)
+  const [extractingSourceId, setExtractingSourceId] = useState<string | null>(null)
+
+  // Claim extraction hook
+  const { result, isLoading: isExtracting, error: extractError, extractClaims, cancel, reset } = useClaimExtraction()
 
   // Use different hooks based on source type
   const createEventSource = useCreateSource(eventId)
@@ -73,6 +81,35 @@ export function SourceList({ eventId, counterNarrativeId, sources, isLoading, is
     }
   }
 
+  const handleExtractClaims = async (source: Source) => {
+    setExtractingSourceId(source.id)
+    try {
+      await extractClaims(source.url, source.articleTitle || undefined, true)
+    } catch (err) {
+      console.error('Failed to extract claims:', err)
+    }
+  }
+
+  const handleSaveClaims = async (claims: Array<{ claimText: string; category: string; confidenceScore: number }>) => {
+    if (!extractingSourceId) return
+
+    try {
+      // Save claims to database
+      await claimsApi.createBulk(extractingSourceId, claims)
+      setExtractingSourceId(null)
+      reset()
+    } catch (err) {
+      console.error('Failed to save claims:', err)
+      throw err // Re-throw to show error in UI
+    }
+  }
+
+  const handleCancelExtraction = () => {
+    cancel()
+    setExtractingSourceId(null)
+    reset()
+  }
+
   if (isLoading) {
     return (
       <div className="space-y-2">
@@ -85,6 +122,22 @@ export function SourceList({ eventId, counterNarrativeId, sources, isLoading, is
 
   return (
     <div className="space-y-4">
+      {/* Claim Extractor */}
+      {extractingSourceId && (
+        <ClaimExtractor
+          claims={result?.claims || []}
+          articleTitle={result?.articleTitle}
+          articleExcerpt={result?.articleExcerpt}
+          wordCount={result?.wordCount}
+          wasTruncated={result?.wasTruncated}
+          isLoading={isExtracting}
+          error={extractError}
+          onSaveClaims={handleSaveClaims}
+          onCancel={handleCancelExtraction}
+          onClose={handleCancelExtraction}
+        />
+      )}
+
       {/* Source list */}
       {sources.length > 0 ? (
         <div className="space-y-3">
@@ -131,7 +184,16 @@ export function SourceList({ eventId, counterNarrativeId, sources, isLoading, is
                       </div>
                     </div>
                     <BiasScale rating={source.biasRating} className="max-w-xs" />
-                    <div className="flex gap-2 pt-1">
+                    <div className="flex gap-2 pt-1 flex-wrap">
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => handleExtractClaims(source)}
+                        className="text-purple-600 dark:text-purple-400"
+                      >
+                        <Sparkles className="h-4 w-4 mr-1" />
+                        Extract Claims
+                      </Button>
                       <Button
                         variant="ghost"
                         size="sm"
