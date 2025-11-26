@@ -1,4 +1,5 @@
 import { useState, useRef } from 'react';
+import { SettingsStorage } from '@/lib/storage';
 
 export interface ExtractedClaim {
   claimText: string;
@@ -48,15 +49,10 @@ export function useClaimExtraction(): UseClaimExtractionReturn {
     setResult(null);
 
     try {
-      // Get AI settings from localStorage
-      const settingsStr = localStorage.getItem('accountability_tracker_ai_settings');
-      if (!settingsStr) {
+      // Get AI settings from SettingsStorage
+      const settings = SettingsStorage.getAISettings();
+      if (!settings.apiKey || settings.apiKey.trim() === '') {
         throw new Error('AI settings not configured. Please configure your API key in settings.');
-      }
-
-      const settings = JSON.parse(settingsStr);
-      if (!settings.apiKey || !settings.model) {
-        throw new Error('API key and model must be configured in settings.');
       }
 
       // Call AI extraction endpoint
