@@ -253,7 +253,22 @@ export const dashboardApi = {
     api.get<ApiResponse<{ trump1: Record<string, number>; trump2: Record<string, number> }>>('/dashboard/comparison'),
 }
 
+export interface Claim {
+  id: string;
+  sourceId: string;
+  claimText: string;
+  category: 'FACTUAL_ASSERTION' | 'OPINION_ANALYSIS' | 'SPECULATION';
+  confidenceScore: number;
+  extractedAt: string;
+}
+
 export const claimsApi = {
+  list: (params: { sourceId?: string; category?: string; minConfidence?: number }) =>
+    api.get<ApiResponse<Claim[]>>('/claims', params),
+
   createBulk: (sourceId: string, claims: Array<{ claimText: string; category: string; confidenceScore: number }>) =>
     api.post<ApiResponse<unknown>>('/claims/bulk', { sourceId, claims }),
+
+  delete: (claimId: string) =>
+    api.delete<void>(`/claims/${claimId}`),
 }

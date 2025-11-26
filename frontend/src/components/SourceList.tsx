@@ -1,7 +1,8 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { BiasRatingBadge, BiasScale } from './BiasRatingBadge'
 import { SourceForm } from './SourceForm'
 import { ClaimExtractor } from './ai/ClaimExtractor'
+import { ClaimsList } from './ClaimsList'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { useCreateSource, useUpdateSource, useDeleteSource } from '@/hooks/useSources'
@@ -10,8 +11,8 @@ import { useClaimExtraction } from '@/hooks/useClaimExtraction'
 import { claimsApi } from '@/services/api'
 import { EmptySourcesState } from './EmptyState'
 import { cn } from '@/lib/utils'
-import { Sparkles } from 'lucide-react'
-import type { Source } from '@/services/api'
+import { Sparkles, CheckCircle, AlertCircle } from 'lucide-react'
+import type { Source, Claim } from '@/services/api'
 
 interface SourceListProps {
   eventId: string
@@ -25,9 +26,33 @@ export function SourceList({ eventId, counterNarrativeId, sources, isLoading, is
   const [isAddingSource, setIsAddingSource] = useState(false)
   const [editingSourceId, setEditingSourceId] = useState<string | null>(null)
   const [extractingSourceId, setExtractingSourceId] = useState<string | null>(null)
+  const [savedClaims, setSavedClaims] = useState<Record<string, Claim[]>>({})
+  const [loadingClaims, setLoadingClaims] = useState<Record<string, boolean>>({})
+  const [deletingClaimId, setDeletingClaimId] = useState<string | null>(null)
+  const [saveSuccess, setSaveSuccess] = useState(false)
 
   // Claim extraction hook
   const { result, isLoading: isExtracting, error: extractError, extractClaims, cancel, reset } = useClaimExtraction()
+
+  // Fetch claims for all sources
+  useEffect(() => {
+    const fetchClaimsForSources = async () => {
+      for (const source of sources) {
+        if (!savedClaims[source.id] && !loadingClaims[source.id]) {
+          setLoadingClaims(prev => ({ ...prev, [source.id]: true }))
+          try {
+            const response = await claimsApi.list({ sourceId: source.id })
+            setSavedClaims(prev => ({ ...prev, [source.id]: response.data }))
+          } catch (err) {
+            console.error(`Failed to fetch claims for source ${source.id}:`, err)
+          } finally {
+            setLoadingClaims(prev => ({ ...prev, [source.id]: false }))
+          }
+        }
+      }
+    }
+    fetchClaimsForSources()
+  }, [sources.map(s => s.id).join(',')]) // Only re-run when source IDs change
 
   // Use different hooks based on source type
   const createEventSource = useCreateSource(eventId)
@@ -82,11 +107,16 @@ export function SourceList({ eventId, counterNarrativeId, sources, isLoading, is
   }
 
   const handleExtractClaims = async (source: Source) => {
+    // Reset any previous state
+    reset()
+
     setExtractingSourceId(source.id)
     try {
       await extractClaims(source.url, source.articleTitle || undefined, true)
     } catch (err) {
       console.error('Failed to extract claims:', err)
+      // Reset state on error
+      setExtractingSourceId(null)
     }
   }
 
@@ -96,6 +126,16 @@ export function SourceList({ eventId, counterNarrativeId, sources, isLoading, is
     try {
       // Save claims to database
       await claimsApi.createBulk(extractingSourceId, claims)
+
+      // Refresh claims for this source
+      const response = await claimsApi.list({ sourceId: extractingSourceId })
+      setSavedClaims(prev => ({ ...prev, [extractingSourceId]: response.data }))
+
+      // Show success message
+      setSaveSuccess(true)
+      setTimeout(() => setSaveSuccess(false), 3000)
+
+      // Close extractor
       setExtractingSourceId(null)
       reset()
     } catch (err) {
@@ -110,6 +150,22 @@ export function SourceList({ eventId, counterNarrativeId, sources, isLoading, is
     reset()
   }
 
+  const handleDeleteClaim = async (claimId: string, sourceId: string) => {
+    if (!confirm('Are you sure you want to delete this claim?')) return
+
+    setDeletingClaimId(claimId)
+    try {
+      await claimsApi.delete(claimId)
+      // Refresh claims for this source
+      const response = await claimsApi.list({ sourceId })
+      setSavedClaims(prev => ({ ...prev, [sourceId]: response.data }))
+    } catch (err) {
+      console.error('Failed to delete claim:', err)
+    } finally {
+      setDeletingClaimId(null)
+    }
+  }
+
   if (isLoading) {
     return (
       <div className="space-y-2">
@@ -122,6 +178,18 @@ export function SourceList({ eventId, counterNarrativeId, sources, isLoading, is
 
   return (
     <div className="space-y-4">
+      {/* Success Message */}
+      {saveSuccess && (
+        <Card className="border-green-500 bg-green-50 dark:bg-green-950">
+          <CardContent className="p-3">
+            <div className="flex items-center gap-2 text-green-700 dark:text-green-300">
+              <CheckCircle className="h-4 w-4" />
+              <span className="text-sm font-medium">Claims saved successfully!</span>
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
       {/* Claim Extractor */}
       {extractingSourceId && (
         <ClaimExtractor
@@ -184,15 +252,28 @@ export function SourceList({ eventId, counterNarrativeId, sources, isLoading, is
                       </div>
                     </div>
                     <BiasScale rating={source.biasRating} className="max-w-xs" />
+
+                    {/* Display saved claims */}
+                    {savedClaims[source.id] && savedClaims[source.id].length > 0 && (
+                      <div className="mt-3">
+                        <ClaimsList
+                          claims={savedClaims[source.id]}
+                          onDelete={(claimId) => handleDeleteClaim(claimId, source.id)}
+                          isDeletingId={deletingClaimId}
+                        />
+                      </div>
+                    )}
+
                     <div className="flex gap-2 pt-1 flex-wrap">
                       <Button
                         variant="ghost"
                         size="sm"
                         onClick={() => handleExtractClaims(source)}
                         className="text-purple-600 dark:text-purple-400"
+                        disabled={extractingSourceId === source.id}
                       >
                         <Sparkles className="h-4 w-4 mr-1" />
-                        Extract Claims
+                        {savedClaims[source.id] && savedClaims[source.id].length > 0 ? 'Re-extract' : 'Extract Claims'}
                       </Button>
                       <Button
                         variant="ghost"
