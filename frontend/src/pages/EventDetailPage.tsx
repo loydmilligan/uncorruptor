@@ -269,7 +269,7 @@ export function EventDetailPage() {
                   isSubmitting={updateCounterNarrative.isPending}
                 />
               ) : event.counterNarrative ? (
-                <div className="space-y-4">
+                <div className="space-y-6">
                   <div>
                     <h4 className="font-medium text-sm text-muted-foreground mb-1">
                       Administration&apos;s Position
@@ -308,6 +308,18 @@ export function EventDetailPage() {
                       <p className="whitespace-pre-wrap text-sm">{event.counterNarrative.sourceRefs}</p>
                     </div>
                   )}
+                  {/* Counter-narrative sources */}
+                  <div>
+                    <h4 className="font-medium text-sm text-muted-foreground mb-3">
+                      Counter-Narrative Sources
+                    </h4>
+                    <SourceList
+                      eventId={event.id}
+                      counterNarrativeId={event.counterNarrative.id}
+                      sources={event.counterNarrative.sources || []}
+                      isCounterNarrative
+                    />
+                  </div>
                 </div>
               ) : (
                 <p className="text-muted-foreground text-sm">

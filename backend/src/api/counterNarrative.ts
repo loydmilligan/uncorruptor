@@ -1,8 +1,11 @@
 import { FastifyPluginAsync } from 'fastify'
 import { counterNarrativeService } from '../services/counterNarrativeService.js'
 import { counterNarrativeSchema } from '../models/counterNarrative.js'
-import { sendSuccess, sendNoContent } from '../lib/response.js'
+import { sourceService } from '../services/sourceService.js'
+import { createSourceSchema, updateSourceSchema } from '../models/source.js'
+import { sendSuccess, sendCreated, sendNoContent } from '../lib/response.js'
 import { ValidationError, handleError } from '../lib/errors.js'
+import { ZodError } from 'zod'
 
 export const counterNarrativeRoutes: FastifyPluginAsync = async (fastify) => {
   // GET /api/events/:eventId/counter-narrative
@@ -157,4 +160,80 @@ export const counterNarrativeRoutes: FastifyPluginAsync = async (fastify) => {
       handleError(error, reply)
     }
   })
+
+  // Source routes for counter-narratives
+  // GET /api/events/:eventId/counter-narrative/:counterNarrativeId/sources
+  fastify.get<{
+    Params: { eventId: string; counterNarrativeId: string }
+  }>('/:eventId/counter-narrative/:counterNarrativeId/sources', async (request, reply) => {
+    try {
+      const sources = await sourceService.listByCounterNarrative(request.params.counterNarrativeId)
+      sendSuccess(reply, sources)
+    } catch (error) {
+      handleError(error, reply)
+    }
+  })
+
+  // POST /api/events/:eventId/counter-narrative/:counterNarrativeId/sources
+  fastify.post<{
+    Params: { eventId: string; counterNarrativeId: string }
+  }>('/:eventId/counter-narrative/:counterNarrativeId/sources', async (request, reply) => {
+    try {
+      const input = createSourceSchema.parse(request.body)
+      const source = await sourceService.create(request.params.counterNarrativeId, input, 'counterNarrative')
+      sendCreated(reply, source)
+    } catch (error) {
+      if (error instanceof ZodError) {
+        handleError(new ValidationError('Invalid source data', formatZodErrors(error)), reply)
+        return
+      }
+      handleError(error, reply)
+    }
+  })
+
+  // PUT /api/events/:eventId/counter-narrative/:counterNarrativeId/sources/:sourceId
+  fastify.put<{
+    Params: { eventId: string; counterNarrativeId: string; sourceId: string }
+  }>('/:eventId/counter-narrative/:counterNarrativeId/sources/:sourceId', async (request, reply) => {
+    try {
+      const input = updateSourceSchema.parse(request.body)
+      const source = await sourceService.update(
+        request.params.counterNarrativeId,
+        request.params.sourceId,
+        input,
+        'counterNarrative'
+      )
+      sendSuccess(reply, source)
+    } catch (error) {
+      if (error instanceof ZodError) {
+        handleError(new ValidationError('Invalid source data', formatZodErrors(error)), reply)
+        return
+      }
+      handleError(error, reply)
+    }
+  })
+
+  // DELETE /api/events/:eventId/counter-narrative/:counterNarrativeId/sources/:sourceId
+  fastify.delete<{
+    Params: { eventId: string; counterNarrativeId: string; sourceId: string }
+  }>('/:eventId/counter-narrative/:counterNarrativeId/sources/:sourceId', async (request, reply) => {
+    try {
+      await sourceService.delete(request.params.counterNarrativeId, request.params.sourceId, 'counterNarrative')
+      sendNoContent(reply)
+    } catch (error) {
+      handleError(error, reply)
+    }
+  })
+}
+
+function formatZodErrors(error: ZodError): Record<string, string[]> {
+  const formatted: Record<string, string[]> = {}
+  for (const issue of error.issues) {
+    const path = issue.path.join('.')
+    if (!formatted[path]) {
+      formatted[path] = []
+    }
+    formatted[path].push(issue.message)
+  }
+  return formatted
 }

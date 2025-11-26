@@ -12,6 +12,7 @@ function transformSource(source: Prisma.SourceGetPayload<{ include: typeof sourc
   return {
     id: source.id,
     eventId: source.eventId,
+    counterNarrativeId: source.counterNarrativeId,
     publicationId: source.publicationId,
     url: source.url,
     articleTitle: source.articleTitle,
@@ -48,11 +49,36 @@ export const sourceService = {
     return sources.map(transformSource)
   },
 
-  async create(eventId: string, input: CreateSourceInput) {
-    // Verify event exists
-    const event = await prisma.event.findUnique({ where: { id: eventId } })
-    if (!event) {
-      throw new NotFoundError('Event', eventId)
+  async listByCounterNarrative(counterNarrativeId: string) {
+    // Verify counter-narrative exists
+    const counterNarrative = await prisma.counterNarrative.findUnique({
+      where: { id: counterNarrativeId }
+    })
+    if (!counterNarrative) {
+      throw new NotFoundError('CounterNarrative', counterNarrativeId)
+    }
+
+    const sources = await prisma.source.findMany({
+      where: { counterNarrativeId },
+      include: sourceIncludes,
+      orderBy: { createdAt: 'desc' },
+    })
+
+    return sources.map(transformSource)
+  },
+
+  async create(parentId: string, input: CreateSourceInput, parentType: 'event' | 'counterNarrative' = 'event') {
+    // Verify parent exists (either event or counter-narrative)
+    if (parentType === 'event') {
+      const event = await prisma.event.findUnique({ where: { id: parentId } })
+      if (!event) {
+        throw new NotFoundError('Event', parentId)
+      }
+    } else {
+      const counterNarrative = await prisma.counterNarrative.findUnique({ where: { id: parentId } })
+      if (!counterNarrative) {
+        throw new NotFoundError('CounterNarrative', parentId)
+      }
     }
 
     // Verify publication exists if provided
@@ -67,7 +93,8 @@ export const sourceService = {
 
     const source = await prisma.source.create({
       data: {
-        eventId,
+        eventId: parentType === 'event' ? parentId : null,
+        counterNarrativeId: parentType === 'counterNarrative' ? parentId : null,
         url: input.url,
         articleTitle: input.articleTitle,
         biasRating: input.biasRating,
@@ -80,16 +107,26 @@ export const sourceService = {
     return transformSource(source)
   },
 
-  async update(eventId: string, sourceId: string, input: UpdateSourceInput) {
-    // Verify event exists
-    const event = await prisma.event.findUnique({ where: { id: eventId } })
-    if (!event) {
-      throw new NotFoundError('Event', eventId)
+  async update(parentId: string, sourceId: string, input: UpdateSourceInput, parentType: 'event' | 'counterNarrative' = 'event') {
+    // Verify parent exists
+    if (parentType === 'event') {
+      const event = await prisma.event.findUnique({ where: { id: parentId } })
+      if (!event) {
+        throw new NotFoundError('Event', parentId)
+      }
+    } else {
+      const counterNarrative = await prisma.counterNarrative.findUnique({ where: { id: parentId } })
+      if (!counterNarrative) {
+        throw new NotFoundError('CounterNarrative', parentId)
+      }
     }
 
-    // Verify source exists and belongs to event
+    // Verify source exists and belongs to parent
     const existing = await prisma.source.findFirst({
-      where: { id: sourceId, eventId },
+      where: {
+        id: sourceId,
+        ...(parentType === 'event' ? { eventId: parentId } : { counterNarrativeId: parentId }),
+      },
     })
     if (!existing) {
       throw new NotFoundError('Source', sourceId)
@@ -109,16 +146,26 @@ export const sourceService = {
     return transformSource(source)
   },
 
-  async delete(eventId: string, sourceId: string) {
-    // Verify event exists
-    const event = await prisma.event.findUnique({ where: { id: eventId } })
-    if (!event) {
-      throw new NotFoundError('Event', eventId)
+  async delete(parentId: string, sourceId: string, parentType: 'event' | 'counterNarrative' = 'event') {
+    // Verify parent exists
+    if (parentType === 'event') {
+      const event = await prisma.event.findUnique({ where: { id: parentId } })
+      if (!event) {
+        throw new NotFoundError('Event', parentId)
+      }
+    } else {
+      const counterNarrative = await prisma.counterNarrative.findUnique({ where: { id: parentId } })
+      if (!counterNarrative) {
+        throw new NotFoundError('CounterNarrative', parentId)
+      }
     }
 
-    // Verify source exists and belongs to event
+    // Verify source exists and belongs to parent
     const existing = await prisma.source.findFirst({
-      where: { id: sourceId, eventId },
+      where: {
+        id: sourceId,
+        ...(parentType === 'event' ? { eventId: parentId } : { counterNarrativeId: parentId }),
+      },
     })
     if (!existing) {
       throw new NotFoundError('Source', sourceId)

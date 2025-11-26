@@ -133,7 +133,8 @@ export interface Publication {
 
 export interface Source {
   id: string
-  eventId: string
+  eventId: string | null
+  counterNarrativeId: string | null
   publicationId: string | null
   url: string
   articleTitle: string | null
@@ -153,6 +154,7 @@ export interface CounterNarrative {
   sourceRefs: string | null
   createdAt: string
   updatedAt: string
+  sources?: Source[]
 }
 
 export type AdminPeriod = 'TRUMP_1' | 'TRUMP_2' | 'OTHER'
@@ -228,6 +230,16 @@ export const counterNarrativeApi = {
 
   delete: (eventId: string) =>
     api.delete<void>(`/events/${eventId}/counter-narrative`),
+
+  // Counter-narrative source management
+  createSource: (eventId: string, counterNarrativeId: string, data: { url: string; articleTitle?: string; biasRating: number; publicationId?: string }) =>
+    api.post<ApiResponse<Source>>(`/events/${eventId}/counter-narrative/${counterNarrativeId}/sources`, data),
+
+  updateSource: (eventId: string, counterNarrativeId: string, sourceId: string, data: Partial<{ url: string; articleTitle?: string; biasRating: number; isArchived: boolean }>) =>
+    api.put<ApiResponse<Source>>(`/events/${eventId}/counter-narrative/${counterNarrativeId}/sources/${sourceId}`, data),
+
+  deleteSource: (eventId: string, counterNarrativeId: string, sourceId: string) =>
+    api.delete<void>(`/events/${eventId}/counter-narrative/${counterNarrativeId}/sources/${sourceId}`),
 }
 
 export const dashboardApi = {

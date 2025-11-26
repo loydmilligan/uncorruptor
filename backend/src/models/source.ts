@@ -12,7 +12,19 @@ export const createSourceSchema = z.object({
   articleTitle: z.string().max(500).optional(),
   biasRating: biasRatingSchema,
   publicationId: z.string().uuid().optional(),
-})
+  eventId: z.string().uuid().optional(),
+  counterNarrativeId: z.string().uuid().optional(),
+}).refine(
+  (data) => {
+    // Must have exactly one of eventId or counterNarrativeId
+    const hasEventId = !!data.eventId;
+    const hasCounterNarrativeId = !!data.counterNarrativeId;
+    return hasEventId !== hasCounterNarrativeId; // XOR: one must be true, not both
+  },
+  {
+    message: 'Must provide either eventId or counterNarrativeId, but not both',
+  }
+)
 
 export const updateSourceSchema = z.object({
   url: z.string().url('Must be a valid URL').max(2048).optional(),
@@ -28,7 +40,8 @@ export type UpdateSourceInput = z.infer<typeof updateSourceSchema>
 // Response types
 export interface SourceResponse {
   id: string
-  eventId: string
+  eventId: string | null
+  counterNarrativeId: string | null
   publicationId: string | null
   url: string
   articleTitle: string | null

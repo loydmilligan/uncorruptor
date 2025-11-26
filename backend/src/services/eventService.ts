@@ -33,7 +33,18 @@ const eventDetailIncludes = {
       createdAt: 'desc' as const,
     },
   },
-  counterNarrative: true,
+  counterNarrative: {
+    include: {
+      sources: {
+        include: {
+          publication: true,
+        },
+        orderBy: {
+          createdAt: 'desc' as const,
+        },
+      },
+    },
+  },
 } satisfies Prisma.EventInclude
 
 // Transform Prisma event to response format
@@ -101,6 +112,23 @@ function transformEventDetail(
           id: event.counterNarrative.id,
           narrative: event.counterNarrative.narrative,
           adminPosition: event.counterNarrative.adminPosition,
+          sources: event.counterNarrative.sources.map((s) => ({
+            id: s.id,
+            url: s.url,
+            articleTitle: s.articleTitle,
+            biasRating: s.biasRating,
+            dateAccessed: s.dateAccessed.toISOString().split('T')[0],
+            isArchived: s.isArchived,
+            publication: s.publication
+              ? {
+                  id: s.publication.id,
+                  name: s.publication.name,
+                  domain: s.publication.domain,
+                  defaultBias: s.publication.defaultBias,
+                  credibility: s.publication.credibility,
+                }
+              : null,
+          })),
         }
       : null,
   }

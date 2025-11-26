@@ -4,22 +4,36 @@ import { SourceForm } from './SourceForm'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { useCreateSource, useUpdateSource, useDeleteSource } from '@/hooks/useSources'
+import { useCreateCounterNarrativeSource, useUpdateCounterNarrativeSource, useDeleteCounterNarrativeSource } from '@/hooks/useCounterNarrativeSources'
 import { EmptySourcesState } from './EmptyState'
+import { cn } from '@/lib/utils'
 import type { Source } from '@/services/api'
 
 interface SourceListProps {
   eventId: string
+  counterNarrativeId?: string
   sources: Source[]
   isLoading?: boolean
+  isCounterNarrative?: boolean
 }
 
-export function SourceList({ eventId, sources, isLoading }: SourceListProps) {
+export function SourceList({ eventId, counterNarrativeId, sources, isLoading, isCounterNarrative = false }: SourceListProps) {
   const [isAddingSource, setIsAddingSource] = useState(false)
   const [editingSourceId, setEditingSourceId] = useState<string | null>(null)
 
-  const createSource = useCreateSource(eventId)
-  const updateSource = useUpdateSource(eventId)
-  const deleteSource = useDeleteSource(eventId)
+  // Use different hooks based on source type
+  const createEventSource = useCreateSource(eventId)
+  const updateEventSource = useUpdateSource(eventId)
+  const deleteEventSource = useDeleteSource(eventId)
+
+  const createCNSource = useCreateCounterNarrativeSource(eventId, counterNarrativeId || '')
+  const updateCNSource = useUpdateCounterNarrativeSource(eventId, counterNarrativeId || '')
+  const deleteCNSource = useDeleteCounterNarrativeSource(eventId, counterNarrativeId || '')
+
+  // Select the appropriate hooks based on source type
+  const createSource = isCounterNarrative ? createCNSource : createEventSource
+  const updateSource = isCounterNarrative ? updateCNSource : updateEventSource
+  const deleteSource = isCounterNarrative ? deleteCNSource : deleteEventSource
 
   const handleCreate = async (data: { url: string; articleTitle?: string; biasRating: number; publicationId?: string }) => {
     try {
@@ -75,7 +89,13 @@ export function SourceList({ eventId, sources, isLoading }: SourceListProps) {
       {sources.length > 0 ? (
         <div className="space-y-3">
           {sources.map((source) => (
-            <Card key={source.id} className={source.isArchived ? 'opacity-60' : ''}>
+            <Card
+              key={source.id}
+              className={cn(
+                source.isArchived && 'opacity-60',
+                isCounterNarrative && 'border-l-4 border-l-amber-500 dark:border-l-amber-600'
+              )}
+            >
               <CardContent className="p-4">
                 {editingSourceId === source.id ? (
                   <SourceForm
