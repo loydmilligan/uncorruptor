@@ -1,0 +1,246 @@
+openapi: 3.0.3
+info:
+  title: Accountability Tracker - AI Features API
+  description: AI-powered tag suggestions and claim extraction endpoints
+  version: 1.0.0
+  contact:
+    name: Accountability Tracker API
+servers:
+  - url: http://localhost:3001/api
+    description: Local development server
+
+paths:
+  /ai/suggest-tags:
+    post:
+      summary: Get AI-powered tag suggestions for an event
+      description: |
+        Analyzes event title and description to suggest relevant tags.
+        Returns 3-5 suggestions with confidence scores.
+        Matches against existing tags in the database.
+      operationId: suggestTags
+      tags:
+        - AI
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - title
+                - description
+              properties:
+                title:
+                  type: string
+                  minLength: 1
+                  maxLength: 500
+                  example: "Cabinet nominee lacks qualifications"
+                description:
+                  type: string
+                  maxLength: 5000
+                  example: "Presidential nominee for Secretary of Education has no prior experience in education policy or administration."
+                existingTags:
+                  type: array
+                  description: List of existing tag names in the database for matching
+                  items:
+                    type: string
+                  example: ["corruption", "breaking-norms", "nepotism", "dishonesty"]
+      responses:
+        '200':
+          description: Tag suggestions successfully generated
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - suggestions
+                properties:
+                  suggestions:
+                    type: array
+                    minItems: 0
+                    maxItems: 5
+                    items:
+                      type: object
+                      required:
+                        - tagName
+                        - confidence
+                        - isExisting
+                      properties:
+                        tagName:
+                          type: string
+                          example: "corruption"
+                        confidence:
+                          type: number
+                          format: float
+                          minimum: 0.0
+                          maximum: 1.0
+                          example: 0.85
+                          description: AI confidence score (0-1)
+                        isExisting:
+                          type: boolean
+                          example: true
+                          description: Whether tag already exists in database
+        '400':
+          description: Invalid request (missing required fields)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Invalid or missing API key
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '429':
+          description: Rate limit exceeded
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '503':
+          description: AI service unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /ai/extract-claims:
+    post:
+      summary: Extract and categorize claims from article URL
+      description: |
+        Fetches article content from URL, extracts verifiable claims,
+        and categorizes them as factual assertions, opinions, or speculation.
+        Uses domain intelligence context to improve categorization accuracy.
+      operationId: extractClaims
+      tags:
+        - AI
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - url
+              properties:
+                url:
+                  type: string
+                  format: uri
+                  maxLength: 2048
+                  example: "https://www.nytimes.com/2025/01/15/politics/example-article.html"
+                domainContext:
+                  type: object
+                  description: Optional domain intelligence to enhance AI analysis
+                  properties:
+                    avgBias:
+                      type: number
+                      format: float
+                      minimum: -3.0
+                      maximum: 3.0
+                      example: -1.2
+                      description: Average bias rating for this domain
+                    sourceCount:
+                      type: integer
+                      minimum: 1
+                      example: 15
+                      description: Number of sources from this domain
+      responses:
+        '200':
+          description: Claims successfully extracted and categorized
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - claims
+                properties:
+                  claims:
+                    type: array
+                    items:
+                      type: object
+                      required:
+                        - text
+                        - category
+                        - confidence
+                      properties:
+                        text:
+                          type: string
+                          maxLength: 1000
+                          example: "The nominee has never held a position in educational administration"
+                        category:
+                          type: string
+                          enum:
+                            - FACTUAL_ASSERTION
+                            - OPINION_ANALYSIS
+                            - SPECULATION
+                          example: "FACTUAL_ASSERTION"
+                        confidence:
+                          type: number
+                          format: float
+                          minimum: 0.0
+                          maximum: 1.0
+                          example: 0.92
+                          description: AI confidence in categorization
+                  articleTitle:
+                    type: string
+                    example: "Controversial Cabinet Pick Raises Questions"
+                    description: Extracted article title (if available)
+        '400':
+          description: Invalid URL format
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Article is behind paywall or access denied
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '408':
+          description: Request timeout (article fetch took too long)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Article parsing failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '503':
+          description: AI service unavailable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+components:
+  schemas:
+    Error:
+      type: object
+      required:
+        - error
+        - message
+      properties:
+        error:
+          type: string
+          example: "INVALID_API_KEY"
+        message:
+          type: string
+          example: "The provided OpenRouter API key is invalid. Please check your settings."
+        details:
+          type: object
+          description: Additional error context (optional)
+
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+      description: User's OpenRouter API key (stored in browser settings)
+
+security:
+  - ApiKeyAuth: []

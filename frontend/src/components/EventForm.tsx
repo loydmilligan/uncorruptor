@@ -5,8 +5,13 @@ import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { TagSelector } from './TagSelector'
 import { DuplicateWarning } from './DuplicateWarning'
+import { TagSuggestions } from './ai/TagSuggestions'
 import { useDuplicateCheck } from '@/hooks/useDuplicateCheck'
+import { useTagSuggestions } from '@/hooks/useTagSuggestions'
+import { useTags, useCreateTag } from '@/hooks/useTags'
+import { useSettings } from '@/hooks/useSettings'
 import type { Event } from '@/services/api'
+import { Sparkles } from 'lucide-react'
 
 interface EventFormData {
   title: string
@@ -34,10 +39,17 @@ export function EventForm({ event, onSubmit, onCancel, isSubmitting }: EventForm
     event?.tags?.find((t) => t.isPrimary)?.id
   )
   const [errors, setErrors] = useState<Record<string, string>>({})
+  const [showSuggestions, setShowSuggestions] = useState(false)
 
   // Check for duplicates only when creating a new event (no existing event ID)
   const shouldCheckDuplicates = !event?.id && title.length > 3 && startDate.length > 0
   const { data: duplicates } = useDuplicateCheck(title, startDate, shouldCheckDuplicates)
+
+  // AI tag suggestions
+  const { suggestions, isLoading, error, getSuggestions, cancel, reset } = useTagSuggestions()
+  const { data: tags } = useTags()
+  const createTag = useCreateTag()
+  const { isAIConfigured } = useSettings()
 
   useEffect(() => {
     if (event) {
@@ -103,6 +115,45 @@ export function EventForm({ event, onSubmit, onCancel, isSubmitting }: EventForm
     }
   }
 
+  const handleGetSuggestions = async () => {
+    if (!title.trim()) {
+      setErrors({ ...errors, title: 'Please enter a title before getting suggestions' })
+      return
+    }
+    setShowSuggestions(true)
+    await getSuggestions(title, description || undefined)
+  }
+
+  const handleAddTag = async (tagName: string) => {
+    if (!tags?.data) return
+
+    // Find or create the tag
+    const existingTag = tags.data.find((t) => t.name.toLowerCase() === tagName.toLowerCase())
+
+    if (existingTag) {
+      // Add the existing tag if not already selected
+      if (!tagIds.includes(existingTag.id)) {
+        setTagIds([...tagIds, existingTag.id])
+      }
+    } else {
+      // Create new tag
+      try {
+        const result = await createTag.mutateAsync({ name: tagName })
+        // Add the newly created tag
+        if (result.data.id && !tagIds.includes(result.data.id)) {
+          setTagIds([...tagIds, result.data.id])
+        }
+      } catch (err) {
+        console.error('Failed to create tag:', err)
+      }
+    }
+  }
+
+  const handleCloseSuggestions = () => {
+    setShowSuggestions(false)
+    reset()
+  }
+
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       <div className="space-y-2">
@@ -156,6 +207,34 @@ export function EventForm({ event, onSubmit, onCancel, isSubmitting }: EventForm
           rows={4}
         />
       </div>
+
+      {/* AI Tag Suggestions Button */}
+      {isAIConfigured && !showSuggestions && (
+        <div className="flex justify-end">
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            onClick={handleGetSuggestions}
+            disabled={!title.trim()}
+          >
+            <Sparkles className="h-4 w-4 mr-2" />
+            Suggest Tags with AI
+          </Button>
+        </div>
+      )}
+
+      {/* Tag Suggestions */}
+      {showSuggestions && (
+        <TagSuggestions
+          suggestions={suggestions}
+          isLoading={isLoading}
+          error={error}
+          onAddTag={handleAddTag}
+          onCancel={cancel}
+          onClose={handleCloseSuggestions}
+        />
+      )}
 
       {/* Duplicate Warning */}
       {duplicates && duplicates.length > 0 && (

@@ -3,6 +3,7 @@
 Auto-generated from all feature plans. Last updated: 2025-11-24
 
 ## Active Technologies
+- TypeScript 5.x (frontend + backend, matching existing project) (002-ai-features)
 
 - TypeScript 5.x (frontend + backend) (001-admin-accountability-tracker)
 
@@ -22,6 +23,7 @@ npm test && npm run lint
 TypeScript 5.x (frontend + backend): Follow standard conventions
 
 ## Recent Changes
+- 002-ai-features: Added TypeScript 5.x (frontend + backend, matching existing project)
 
 - 001-admin-accountability-tracker: Added TypeScript 5.x (frontend + backend)
 

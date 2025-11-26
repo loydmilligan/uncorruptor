@@ -8,6 +8,19 @@
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Accountability Tracker</title>
+    <script>
+      // Apply theme class before React loads to prevent flicker
+      (function() {
+        try {
+          const theme = localStorage.getItem('accountability_tracker_theme');
+          if (theme === 'dark') {
+            document.documentElement.classList.add('dark');
+          }
+        } catch (e) {
+          // Ignore localStorage errors
+        }
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>

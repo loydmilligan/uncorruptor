@@ -1,4 +1,4 @@
-import { PrismaClient, StrengthRating } from '@prisma/client'
+import { PrismaClient } from '@prisma/client'
 import type { CounterNarrativeInput, CounterNarrativeResponse } from '../models/counterNarrative.js'
 import { NotFoundError } from '../lib/errors.js'
 
@@ -7,20 +7,16 @@ const prisma = new PrismaClient()
 function transformCounterNarrative(cn: {
   id: string
   eventId: string
-  narrativeText: string
-  adminStrength: StrengthRating
-  concernStrength: StrengthRating
-  sourceRefs: string | null
+  narrative: string
+  adminPosition: string | null
   createdAt: Date
   updatedAt: Date
 }): CounterNarrativeResponse {
   return {
     id: cn.id,
     eventId: cn.eventId,
-    narrativeText: cn.narrativeText,
-    adminStrength: cn.adminStrength,
-    concernStrength: cn.concernStrength,
-    sourceRefs: cn.sourceRefs,
+    narrative: cn.narrative,
+    adminPosition: cn.adminPosition,
     createdAt: cn.createdAt.toISOString(),
     updatedAt: cn.updatedAt.toISOString(),
   }
@@ -52,16 +48,12 @@ export const counterNarrativeService = {
       where: { eventId },
       create: {
         eventId,
-        narrativeText: input.narrativeText,
-        adminStrength: input.adminStrength as StrengthRating,
-        concernStrength: input.concernStrength as StrengthRating,
-        sourceRefs: input.sourceRefs,
+        narrative: input.narrative,
+        adminPosition: input.adminPosition,
       },
       update: {
-        narrativeText: input.narrativeText,
-        adminStrength: input.adminStrength as StrengthRating,
-        concernStrength: input.concernStrength as StrengthRating,
-        sourceRefs: input.sourceRefs,
+        narrative: input.narrative,
+        adminPosition: input.adminPosition,
       },
     })
 

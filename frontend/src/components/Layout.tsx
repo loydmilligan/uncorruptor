@@ -1,4 +1,5 @@
 import { Link, Outlet, useLocation } from 'react-router-dom'
+import { SettingsPanel } from './settings/SettingsPanel'
 
 const navigation = [
   { name: 'Events', href: '/events' },
@@ -35,6 +36,7 @@ export function Layout() {
             </nav>
           </div>
           <div className="flex flex-1 items-center justify-end space-x-2">
+            <SettingsPanel />
             <Link
               to="/events/new"
               className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground shadow hover:bg-primary/90 transition-colors"

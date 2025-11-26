@@ -8,7 +8,30 @@ interface TagBadgeProps {
   onRemove?: () => void
 }
 
+// Helper to adjust tag colors for dark mode (increase opacity for better contrast)
+function getTagStyles(color: string, isDark: boolean) {
+  if (isDark) {
+    // Dark mode: higher opacity for better visibility
+    return {
+      backgroundColor: `${color}30`,
+      color: color,
+      border: `1px solid ${color}60`,
+    }
+  } else {
+    // Light mode: lower opacity
+    return {
+      backgroundColor: `${color}20`,
+      color: color,
+      border: `1px solid ${color}40`,
+    }
+  }
+}
+
 export function TagBadge({ name, color, className, isPrimary, onRemove }: TagBadgeProps) {
+  // Check if dark mode is active by looking at document class
+  // This will re-render when theme changes because parent components re-render
+  const isDark = document.documentElement.classList.contains('dark')
+
   return (
     <span
       className={cn(
@@ -16,11 +39,7 @@ export function TagBadge({ name, color, className, isPrimary, onRemove }: TagBad
         isPrimary && 'ring-2 ring-yellow-500 ring-offset-1',
         className
       )}
-      style={{
-        backgroundColor: `${color}20`,
-        color: color,
-        border: `1px solid ${color}40`,
-      }}
+      style={getTagStyles(color, isDark)}
     >
       {name}
       {onRemove && (
