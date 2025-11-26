@@ -123,18 +123,18 @@ This project uses web application structure:
 
 ### Implementation for User Story 4
 
-- [ ] T037 [P] [US4] Implement tag suggestion prompt engineering in `backend/src/services/tagSuggestion.ts` with system and user prompts
-- [ ] T038 [P] [US4] Create POST /api/ai/suggest-tags endpoint in `backend/src/api/ai.ts` using OpenRouter client
-- [ ] T039 [P] [US4] Add tag matching logic against existing database tags in tagSuggestion service
-- [ ] T040 [P] [US4] Create TagSuggestions component in `frontend/src/components/ai/TagSuggestions.tsx` with suggestion cards
-- [ ] T041 [P] [US4] Create useTagSuggestions hook in `frontend/src/hooks/useTagSuggestions.ts` with loading state and cancellation
-- [ ] T042 [P] [US4] Create aiService API client in `frontend/src/services/aiService.ts` for suggest-tags endpoint
-- [ ] T043 [US4] Add "Suggest Tags" button to CreateEvent form in `frontend/src/pages/CreateEvent.tsx`
-- [ ] T044 [US4] Add "Suggest Tags" button to Event edit form in `frontend/src/pages/EventDetail.tsx`
-- [ ] T045 [US4] Implement one-click tag addition (match existing or create new) in TagSuggestions component
-- [ ] T046 [US4] Add loading indicator with cancel option during AI processing
-- [ ] T047 [US4] Add error handling for API failures (invalid key, rate limit, service unavailable)
-- [ ] T048 [US4] Display confidence scores for each suggestion in TagSuggestions component
+- [x] T037 [P] [US4] Implement tag suggestion prompt engineering in `backend/src/services/tagSuggestion.ts` with system and user prompts
+- [x] T038 [P] [US4] Create POST /api/ai/suggest-tags endpoint in `backend/src/api/ai.ts` using OpenRouter client
+- [x] T039 [P] [US4] Add tag matching logic against existing database tags in tagSuggestion service
+- [x] T040 [P] [US4] Create TagSuggestions component in `frontend/src/components/ai/TagSuggestions.tsx` with suggestion cards
+- [x] T041 [P] [US4] Create useTagSuggestions hook in `frontend/src/hooks/useTagSuggestions.ts` with loading state and cancellation
+- [x] T042 [P] [US4] Create aiService API client in `frontend/src/services/aiService.ts` for suggest-tags endpoint
+- [x] T043 [US4] Add "Suggest Tags" button to CreateEvent form in `frontend/src/components/EventForm.tsx` (used for both create and edit)
+- [x] T044 [US4] Add "Suggest Tags" button to Event edit form (completed via EventForm component reuse)
+- [x] T045 [US4] Implement one-click tag addition (match existing or create new) in EventForm handleAddTag function
+- [x] T046 [US4] Add loading indicator with cancel option during AI processing (implemented in TagSuggestions component)
+- [x] T047 [US4] Add error handling for API failures (invalid key, rate limit, service unavailable - implemented in useTagSuggestions hook)
+- [x] T048 [US4] Display confidence scores for each suggestion in TagSuggestions component (with color-coded progress bars)
 
 **Checkpoint**: Tag suggestions work end-to-end with proper error handling and user feedback
 
@@ -148,21 +148,21 @@ This project uses web application structure:
 
 ### Implementation for User Story 5
 
-- [ ] T049 [P] [US5] Implement article content extraction in `backend/src/services/articleParser.ts` using @mozilla/readability
-- [ ] T050 [P] [US5] Add article fetching with timeout and user-agent in articleParser service
-- [ ] T051 [P] [US5] Implement claim extraction prompt engineering in `backend/src/services/claimExtraction.ts` with category definitions
-- [ ] T052 [P] [US5] Create POST /api/ai/extract-claims endpoint in `backend/src/api/ai.ts`
-- [ ] T053 [P] [US5] Add paywall detection logic in articleParser service (check for 403, subscription prompts)
-- [ ] T054 [P] [US5] Add article content summarization for large articles (>5000 words) in articleParser
-- [ ] T055 [P] [US5] Create Claim model CRUD operations in `backend/src/models/claim.ts`
-- [ ] T056 [P] [US5] Create ClaimExtractor component in `frontend/src/components/ai/ClaimExtractor.tsx` with claim cards and category badges
-- [ ] T057 [P] [US5] Create useClaimExtraction hook in `frontend/src/hooks/useClaimExtraction.ts` with loading and cancellation
-- [ ] T058 [US5] Add "Extract Claims" button next to source URL in SourceForm component in `frontend/src/components/sources/SourceForm.tsx`
-- [ ] T059 [US5] Implement selective claim saving (checkboxes for user selection) in ClaimExtractor component
-- [ ] T060 [US5] Add loading indicator with progress and cancel option during extraction
-- [ ] T061 [US5] Add error handling for paywalls, CORS, timeouts, parsing failures
-- [ ] T062 [US5] Display confidence scores and category badges for each extracted claim
-- [ ] T063 [US5] Save selected claims to database linked to sourceId
+- [x] T049 [P] [US5] Implement article content extraction in `backend/src/services/articleParser.ts` using @mozilla/readability
+- [x] T050 [P] [US5] Add article fetching with timeout and user-agent in articleParser service
+- [x] T051 [P] [US5] Implement claim extraction prompt engineering in `backend/src/services/claimExtraction.ts` with category definitions
+- [x] T052 [P] [US5] Create POST /api/ai/extract-claims endpoint in `backend/src/api/ai.ts`
+- [x] T053 [P] [US5] Add paywall detection logic in articleParser service (check for 403, subscription prompts)
+- [x] T054 [P] [US5] Add article content summarization for large articles (>5000 words) in articleParser
+- [x] T055 [P] [US5] Create Claim model CRUD operations in `backend/src/models/claim.ts` and `backend/src/services/claimService.ts`
+- [x] T056 [P] [US5] Create ClaimExtractor component in `frontend/src/components/ai/ClaimExtractor.tsx` with claim cards and category badges
+- [x] T057 [P] [US5] Create useClaimExtraction hook in `frontend/src/hooks/useClaimExtraction.ts` with loading and cancellation
+- [ ] T058 [US5] Add "Extract Claims" button next to source URL in SourceForm component (requires integration with source management)
+- [x] T059 [US5] Implement selective claim saving (checkboxes for user selection) in ClaimExtractor component
+- [x] T060 [US5] Add loading indicator with progress and cancel option during extraction (integrated in ClaimExtractor)
+- [x] T061 [US5] Add error handling for paywalls, CORS, timeouts, parsing failures (implemented in articleParser and useClaimExtraction)
+- [x] T062 [US5] Display confidence scores and category badges for each extracted claim (implemented in ClaimExtractor)
+- [ ] T063 [US5] Save selected claims to database linked to sourceId (requires API integration)
 
 **Checkpoint**: Claim extraction works end-to-end with robust error handling for edge cases
 

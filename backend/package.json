@@ -27,6 +27,7 @@
     "zod": "^3.23.8"
   },
   "devDependencies": {
+    "@types/jsdom": "^27.0.0",
     "@types/node": "^20.17.6",
     "prisma": "^5.22.0",
     "tsx": "^4.19.2",
