@@ -1,0 +1,221 @@
+openapi: 3.0.3
+info:
+  title: Accountability Tracker - Domain Intelligence API
+  description: Domain tracking and bias rating pre-fill suggestions
+  version: 1.0.0
+servers:
+  - url: http://localhost:3001/api
+    description: Local development server
+
+paths:
+  /domains/{normalizedDomain}/stats:
+    get:
+      summary: Get statistics for a specific domain
+      description: |
+        Returns aggregated statistics for a normalized domain including
+        total source count, average bias rating, usage frequency, and timestamps.
+      operationId: getDomainStats
+      tags:
+        - Domain Intelligence
+      parameters:
+        - name: normalizedDomain
+          in: path
+          required: true
+          description: Normalized domain name (lowercase, no www or protocol)
+          schema:
+            type: string
+            pattern: '^[a-z0-9.-]+\.[a-z]{2,}$'
+            example: "nytimes.com"
+      responses:
+        '200':
+          description: Domain statistics retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DomainStats'
+        '404':
+          description: Domain not found (no sources from this domain yet)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /domains/suggest-bias:
+    get:
+      summary: Get bias rating suggestion for a URL
+      description: |
+        Extracts domain from URL and returns suggested bias rating
+        based on historical data. Returns null if domain is unknown.
+      operationId: suggestBiasRating
+      tags:
+        - Domain Intelligence
+      parameters:
+        - name: url
+          in: query
+          required: true
+          description: Full URL to extract domain from
+          schema:
+            type: string
+            format: uri
+            example: "https://www.nytimes.com/2025/01/15/article.html"
+      responses:
+        '200':
+          description: Bias suggestion generated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - suggestedBias
+                  - confidence
+                  - domainStats
+                properties:
+                  suggestedBias:
+                    type: number
+                    format: float
+                    nullable: true
+                    minimum: -3.0
+                    maximum: 3.0
+                    example: -1.2
+                    description: Suggested bias rating (null if domain unknown)
+                  confidence:
+                    type: number
+                    format: float
+                    minimum: 0.0
+                    maximum: 1.0
+                    example: 0.85
+                    description: Confidence in suggestion based on sample size
+                  domainStats:
+                    allOf:
+                      - $ref: '#/components/schemas/DomainStats'
+                      - nullable: true
+                    description: Full domain statistics (null if domain unknown)
+        '400':
+          description: Invalid URL format
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /domains:
+    get:
+      summary: List all tracked domains
+      description: |
+        Returns paginated list of all domains with statistics,
+        sorted by most recently used.
+      operationId: listDomains
+      tags:
+        - Domain Intelligence
+      parameters:
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 50
+          description: Number of domains to return
+        - name: offset
+          in: query
+          schema:
+            type: integer
+            minimum: 0
+            default: 0
+          description: Number of domains to skip (pagination)
+        - name: sortBy
+          in: query
+          schema:
+            type: string
+            enum:
+              - lastUsed
+              - totalSources
+              - avgBias
+            default: lastUsed
+          description: Field to sort by
+      responses:
+        '200':
+          description: Domain list retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - domains
+                  - total
+                  - limit
+                  - offset
+                properties:
+                  domains:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/DomainStats'
+                  total:
+                    type: integer
+                    example: 127
+                    description: Total number of domains in database
+                  limit:
+                    type: integer
+                    example: 50
+                  offset:
+                    type: integer
+                    example: 0
+
+components:
+  schemas:
+    DomainStats:
+      type: object
+      required:
+        - normalizedDomain
+        - totalSources
+        - usageFrequency
+        - firstSeen
+        - lastUsed
+      properties:
+        normalizedDomain:
+          type: string
+          example: "nytimes.com"
+          description: Normalized domain name
+        totalSources:
+          type: integer
+          minimum: 0
+          example: 15
+          description: Number of sources from this domain
+        avgBiasRating:
+          type: number
+          format: float
+          nullable: true
+          minimum: -3.0
+          maximum: 3.0
+          example: -1.2
+          description: Average bias rating (null if no sources with ratings)
+        usageFrequency:
+          type: integer
+          minimum: 0
+          example: 15
+          description: Number of times domain has been used
+        firstSeen:
+          type: string
+          format: date-time
+          example: "2025-01-10T14:30:00Z"
+          description: When domain was first encountered
+        lastUsed:
+          type: string
+          format: date-time
+          example: "2025-01-25T09:15:00Z"
+          description: Most recent source addition from this domain
+
+    Error:
+      type: object
+      required:
+        - error
+        - message
+      properties:
+        error:
+          type: string
+          example: "DOMAIN_NOT_FOUND"
+        message:
+          type: string
+          example: "No sources found from domain 'example.com'"
+        details:
+          type: object
+          description: Additional error context (optional)

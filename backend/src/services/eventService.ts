@@ -99,10 +99,8 @@ function transformEventDetail(
     counterNarrative: event.counterNarrative
       ? {
           id: event.counterNarrative.id,
-          narrativeText: event.counterNarrative.narrativeText,
-          adminStrength: event.counterNarrative.adminStrength,
-          concernStrength: event.counterNarrative.concernStrength,
-          sourceRefs: event.counterNarrative.sourceRefs,
+          narrative: event.counterNarrative.narrative,
+          adminPosition: event.counterNarrative.adminPosition,
         }
       : null,
   }

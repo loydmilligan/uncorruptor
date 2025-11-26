@@ -12,10 +12,8 @@ const bulkSourceSchema = z.object({
 
 // Counter-narrative schema for bulk import
 const bulkCounterNarrativeSchema = z.object({
-  narrativeText: z.string().min(1),
-  adminStrength: z.enum(['weak', 'moderate', 'strong']),
-  concernStrength: z.enum(['weak', 'moderate', 'strong']),
-  sourceRefs: z.string().optional(),
+  narrative: z.string().min(1),
+  adminPosition: z.string().optional(),
 })
 
 // Analysis schemas (future-proofing)

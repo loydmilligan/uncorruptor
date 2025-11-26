@@ -128,10 +128,8 @@ export const bulkImportService = {
       await prisma.counterNarrative.create({
         data: {
           eventId: event.id,
-          narrativeText: eventData.counterNarrative.narrativeText,
-          adminStrength: eventData.counterNarrative.adminStrength,
-          concernStrength: eventData.counterNarrative.concernStrength,
-          sourceRefs: eventData.counterNarrative.sourceRefs || null,
+          narrative: eventData.counterNarrative.narrative,
+          adminPosition: eventData.counterNarrative.adminPosition || null,
         },
       })
     }
